@@ -20,7 +20,7 @@
     2）BatchNormalization：批归一化，作用是解决梯度消失的问题。
     3）Activation：激活函数。
     4）Polling：池化，用于减少特征数量；Maxpolling用于提取图片纹理，averagepolling用于保留背景特征。
-    // polling层后，有时会使用Dropout来加快训练时的速度。
+    // polling层后，有时会使用Dropout来加快训练时的速度。dropout主要的功能是解决过拟合。
     5）Dense：全连接层
     
     
