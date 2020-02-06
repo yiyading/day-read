@@ -1,0 +1,19 @@
+1.1 Getting Started
+
+  \n in the string is C notation for the newline character.  
+  printf never supplies a newline character automatically.  
+  exercise 1-1. Run the "hello, world" program on your system. Experiment leveing out parts of the program, to see what error messages you get.  
+  Exercise 1-2. Experiment to find out what happens when prints's argument string contains \c, where c is some character not listed above.
+
+
+1.2 Variables and Arithmetic Expressions
+
+  If an arithmetic operator has one floating-point operand and one integer operand, the integer will be converted to floating point before the operation is done.
+  %3.0 says that a floating-point number is to be at least three characters wide, with no decimal point and no fraction digit.
+  %6.1f describes another number that is to be printed at least six characters wide,with 1 digit after the decimal point.
+  %d: print as decimal integer.
+  %6d: print as decimal integer, at least 6 characters wide. 
+  %f: print as floating point.
+  %6f: print as floating point, at least 6 characters wide.
+  %.2f: print as floating point, 2 characters after decimal point.
+  %6.2f: print as floating point, at least 6 wide and 2 after decimal point.
