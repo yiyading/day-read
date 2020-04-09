@@ -1,12 +1,11 @@
-/* purpose: 实现一个内核模块，该模块创建/proc/tasklist文件，并且提取系统中所有进程的pid、state、和名称（comm）进行显示
- *
- */
-#include<linux/module.h>
-#include<linux/proc_fs.h>
-#include<linux/sched/task.h>
-#include<linux/seq_file.h>
-#include<linux/slab.h>
-#include<linux/sched/signal.h>
+// 实现一个内核模块，该模块创建/proc/tasklist文件，并且提取系统中所有进程的pid、state、和名称（comm）进行显示
+ 
+#include<linux/module.h>	// 初始化模块
+#include<linux/proc_fs.h>	// 创建进程信息入口
+#include<linux/sched/task.h>	// 初始进程
+#include<linux/seq_file.h>	// 序列文件
+#include<linux/slab.h>		// 内存分配释放
+#include<linux/sched/signal.h>	// 下一个进程
 
 char modname[] = "tasklise";
 struct task_struct *task;
