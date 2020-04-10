@@ -22,7 +22,7 @@ mknod是比较老的函数，而**使用mkfifo函数更加规范**，尽量使�
 > 2. 传递给open的是FIFO的路径名，不是正常的文件。<br>
 
 打开FIFO文件通常有四种方式：<br>
-> open(const char *path, O_RDONLY);			// 1
+> open(const char *path, O_RDONLY);			// 1 <br>
 > open(const char *path, O_RDONLY | O_NONBLOCK);	// 2
 > 
 > open(const char *path, O_WRONLY);			// 3
