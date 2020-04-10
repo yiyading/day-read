@@ -6,22 +6,20 @@
 #include<fcntl.h>
 #include<errno.h>
 
-#define PATH "./fifo"
+#define PATH "./fifo_NONBLOCK"
 #define SIZE 128
 
 int main(){
 	umask(0);
 	
-	// 判断是否有FIFO文件，如果没有，则使用mkfifo函数创建
 	if(access(PATH, F_OK) == -1){
 		if (mkfifo (PATH,0777) == -1){
 			perror ("mkefifo error");
 			exit(0);
 		}
 	}
-	
-	// 只读阻塞打开FIFO文件，配合只写阻塞
-	int fd = open(PATH,O_RDONLY);
+
+	int fd = open(PATH,O_RDONLY | O_NONBLOCK);
 	if (fd<0){
 		printf("open fd is error\n");
 		return 0;
@@ -29,7 +27,6 @@ int main(){
 	
 	printf("This is read! fd=%d\n", fd);	// 测试open的阻塞
 	
-	// 设置Buf缓冲区，使用无限循环，不断地从FIFO中读出内容
 	char Buf[SIZE];
 	while(1){
 		ssize_t s = read(fd,Buf,sizeof(Buf));
@@ -48,7 +45,6 @@ int main(){
 		}
 	}
 		
-	// 关闭文件描述符fd
 	close (fd);
 	return 3;
 }

@@ -7,11 +7,11 @@
 #include<errno.h>
 #include<fcntl.h>
 
-#define PATH "./fifo"
+#define PATH "./fifo_NONBLOCK"
 #define SIZE 128
 
 int main(){
-	int fd=open(PATH, O_WRONLY);
+	int fd=open(PATH, O_WRONLY | O_NONBLOCK);
 	
 	if(fd<0){
 		perror("open error");
