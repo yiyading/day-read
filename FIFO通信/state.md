@@ -38,3 +38,11 @@ open函数中的第二个参数中O_NONBLOCK选项表示非阻塞；如果没有
 对于以只写方式（O_WRONLY）打开的FIFO文件，如果open调用是阻塞的（即第二个参数为O_WRONLY），open调用将被阻塞，直到有一个进程以只读方式打开同一个FIFO文件为止；如果open调用是非阻塞的（即第二个参数为O_WRONLY | O_NONBLOCK），open总会立即返回，但如果没有其他进程以只读方式打开同一个FIFO文件，open调用将返回-1，并且FIFO也不会被打开。
 
 # 四、使用FIFO实现进程间通信
+例子为同时打开读写两个客户端，在“读”代码中创建FIFO文件，实时的将写入读出。<br>
+
+如果想要通过FIFO从一个单独的文件中读出数据，并写入另外一个文件中，只需在代码中加入打开/关闭新文件和读出/写入代码段即可。
+
+## 1. 阻塞通信
+[readfifo.c](https://github.com/yiyading/day-read/blob/master/FIFO%E9%80%9A%E4%BF%A1/readfifo.c)<br>
+
+[writefifo.c][https://github.com/yiyading/day-read/blob/master/FIFO%E9%80%9A%E4%BF%A1/writefifo.c]<br>
