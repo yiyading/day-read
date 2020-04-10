@@ -22,11 +22,11 @@ mknod是比较老的函数，而**使用mkfifo函数更加规范**，尽量使�
 > 2. 传递给open的是FIFO的路径名，不是正常的文件。<br>
 
 打开FIFO文件通常有四种方式：<br>
-> open(const char *path, O_RDONLY);			// 1 <br>
-> open(const char *path, O_RDONLY | O_NONBLOCK);	// 2
+> open(const char \*path, O_RDONLY); // 1 <br>
+> open(const char \*path, O_RDONLY | O_NONBLOCK); // 2 <br>
 > 
-> open(const char *path, O_WRONLY);			// 3
-> open(const char *path, O_WRONLY | O_NONBLOCK); 	// 4
+> open(const char \*path, O_WRONLY); // 3 <br>
+> open(const char \*path, O_WRONLY | O_NONBLOCK); // 4 <br>
 
 open函数中的第二个参数中O_NONBLOCK选项表示非阻塞；如果没有O_NONBLOCK选项，表示open是阻塞的。<br>
 
@@ -46,3 +46,21 @@ open函数中的第二个参数中O_NONBLOCK选项表示非阻塞；如果没有
 > [readfifo.c](https://github.com/yiyading/day-read/blob/master/FIFO%E9%80%9A%E4%BF%A1/readfifo.c)<br>
 > <br>
 > [writefifo.c](https://github.com/yiyading/day-read/blob/master/FIFO%E9%80%9A%E4%BF%A1/writefifo.c)<br>
+
+2. 非阻塞通信
+> [readfifo_NONBLOCK.c](https://github.com/yiyading/day-read/blob/master/FIFO%E9%80%9A%E4%BF%A1/readfifo_NONBLOCK.c)<br>
+> <br>
+> [writefifo_NONBLOCK.c](https://github.com/yiyading/day-read/blob/master/FIFO%E9%80%9A%E4%BF%A1/writefifo_NONBLOCK.c)<br>
+
+# 五、命名管道的安全问题
+FIFO通信就是一个进程向FIFO文件中写数据，而另一个进程则在FIFO文件中读数据。
+
+如果只使用一个FIFO文件，但同时有多个进程向FIFO文件中写数据，而只有一个进程从FIFO文件中读数据，会出现数据块的交错。
+
+不同进程向同一个FIFO文件中写入数据是非常常见的。为了解决这一问题，可以让写操作原子化。在系统规定中，以O_WRONLY（即阻塞方式）打开的FIFO中， 如果写入的数据长度小于等待PIPE_BUF，那么或者写入全部字节，或者一个字节都不写入。如果所有的写请求都是发往一个阻塞的FIFO的，并且每个写入请求的数据长度小于等于PIPE_BUF字节，系统就可以确保数据决不会交错在一起。<br>
+
+# 六、FIFO与匿名管道对比
+使用匿名管道，通信进程间需要为父子关系，必须由一个共同祖先启动。匿名管道的好处在于没有上面提到的数据块交错问题。
+
+FIFO中的两个进程间没有什么必然联系，他们只是通过了一个FIFO文件来实现通信，不需要共同的祖先启动。但为了防止数据交错问题，我们采用阻塞FIFO，让写操作变成原子操作。<br>
+
