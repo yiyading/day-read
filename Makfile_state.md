@@ -44,7 +44,35 @@ command也就是make需要执行的命令。（任意的Shell命令）
 这是一个文件的依赖关系，也就是说，target这一个或多个的目标文件依赖dependence中的文件，其生成规则定义在command中。也就是说，dependence中如果有一个以上的文件比target文件要新的话，command所定义的命令就会被执行。这就是Makefile的规则。也是**Makefile中的核心内容**。<br>
 
 ## 2.举个栗子
+正如前面所说的，如果一个工程有3个头文件，和8个C文件，我们为了完成前面所述的那三个规则，我们的Makefile应该是下面的这个样子的。
 ```
 edit : main.o kbd.o command.o display.o insert.o search.o files.o utils.o
 	cc -o edit main.o kbd.o command.o display.o insert.o search.o files.o utils.o
+
+main.o : main.c defs.h
+	cc -c main.c
+
+kbd.o : kbd.c defs.h command.h
+	cc -c kbd.c
+
+command.o : command.c defs.h command.h
+	cc -c command.c
+
+display.o : display.c defs.h buffer.h
+	cc -c display.c
+
+insert.o : insert.c defs.h buffer.h
+	cc -c insert.c
+
+search.o : search.c defs.h buffer.h
+	cc -c search.c
+
+files.o : files.c defs.h buffer.h command.h
+	cc -c files.c
+
+utils.o : utils.c defs.h
+	cc -c utils.c
+
+clean :
+	rm edit main.o kbd.o command.o display.o insert.o search.o files.o utils.o
 ```
