@@ -164,12 +164,19 @@ edit : $(obj)
 	cc -o edit $(obj)
 
 main.o : main.c defs.h
+
 kbd.o : kbd.c defs.h command.h
+
 command.o : command.c defs.h command.h
+
 display.o : display.c defs.h buffer.h
+
 insert.o : insert.c defs.h buffer.h
+
 search.o : search.c defs.h buffer.h
+
 files.o : files.c defs.h buffer.h command.h
+
 utils.o : utils.c defs.h
 
 .PHONY : clean
@@ -194,7 +201,9 @@ edit : $(obj)
 	cc -o edit $(obj)
 
 $(obj) : defs.h
+
 kbd.o command.o files.o : command.h
+
 display.o insert.o search.o files.o : buffer.h
 
 .PHONY : clean
@@ -226,13 +235,15 @@ clean :
 Makefile里主要包含了五个东西：
 > 显式规则: 显式规则说明了，如何生成一个或多的的目标文件。这是由Makefile的书写者明显指出，要生成的文件，文件的依赖文件，生成的命令。<br>
 > <br>
-> 隐晦规则 :由于我们的make有自动推导的功能，所以隐晦的规则可以让我们比较粗糙地简略地书写Makefile，这是由make所支持的。<br>
+> 隐晦规则: 由于我们的make有自动推导的功能，所以隐晦的规则可以让我们比较粗糙地简略地书写Makefile，这是由make所支持的。<br>
 > <br>
-> 变量定义 :在Makefile中我们要定义一系列的变量，变量一般都是字符串，这有点像c语言中的宏，当Makefile被执行时，其中的变量都会被扩展到相应的引用位置上。<br>
+> 变量定义: 在Makefile中我们要定义一系列的变量，变量一般都是字符串，这有点像c语言中的宏，当Makefile被执行时，其中的变量都会被扩展到相应的引用位置上。<br>
 > <br>
-> 文件指示 <br>
+> 文件指示: <br>
 >> 在一个Makefile中引用另一个Makefile，就像C语言中的include一样<br>
 >> 据某些情况指定Makefile中的有效部分，就像C语言中的预编译#if一样<br>
+>> 定义一个多行的命令<br>
+> <br>
 > 注释<br>
 
 
