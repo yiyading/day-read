@@ -1,3 +1,4 @@
+# 四、Makefile总述
 # 一、概述
 什么是makefile？或许很多Winodws的程序员都不知道这个东西，因为那些Windows的IDE都为你做了这个工作，但我觉得要作一个优秀的和professional的程序员，makefile还是要懂。这就好像现在有这么多的HTML的编辑器，但如果你想成为一个专业人士，你还是要了解HTML的标识的含义。特别在Unix下的软件编译，你就不能不自己写makefile了，会不会写makefile，从一个侧面说明了一个人是否具备完成大型工程的能力。
 
@@ -240,10 +241,11 @@ Makefile里主要包含了五个东西：
 > 变量定义: 在Makefile中我们要定义一系列的变量，变量一般都是字符串，这有点像c语言中的宏，当Makefile被执行时，其中的变量都会被扩展到相应的引用位置上。<br>
 > <br>
 > 文件指示: <br>
->> 在一个Makefile中引用另一个Makefile，就像C语言中的include一样<br>
->> 据某些情况指定Makefile中的有效部分，就像C语言中的预编译#if一样<br>
->> 定义一个多行的命令<br>
+>> 1. 在一个Makefile中引用另一个Makefile，就像C语言中的include一样<br>
+>> 2. 据某些情况指定Makefile中的有效部分，就像C语言中的预编译#if一样<br>
+>> 3. 定义一个多行的命令<br>
 > <br>
-> 注释<br>
+> 注释: Makefile中只有行注释，和UNIX的Shell脚本一样，其注释是用“**#**”字符，这个就像C/C++中的“//”一样。如果你要在你的Makefile中使用“#”字符，可以用反斜框进行转义，如：“\#”。<br>
+
 
 
