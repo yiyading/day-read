@@ -80,7 +80,7 @@ clean :
 
 在定义好依赖关系后，后续的那一行定义了如何生成目标文件的操作系统命令，一定要以一个Tab键作为开头。记住，make并不管命令是怎么工作的，他只管执行所定义的命令。make会比较targets文件和dependence文件的修改日期，如果dependence文件的日期要比targets文件的日期要新，或者target不存在的话，那么，make就会执行后续定义的命令。
 
-这里要说明一点的是，clean不是一个文件，它只不过是一个动作名字，有点像C语言中的lable一样，其冒号后什么也没有，那么，make就不会自动去找文件的依赖性，也就不会自动执行其后所定义的命令。要执行其后的命令，就要在make命令后明显得指出这个lable的名字。这样的方法非常有用，我们可以在一个makefile中定义不用的编译或是和编译无关的命令，比如程序的打包，程序的备份，等等。
+这里要说明一点的是，clean不是一个文件，它只不过是一个动作名字，有点像C语言中的lable一样，其冒号后什么也没有，那么，make就不会自动去找文件的依赖性，也就不会自动执行其后所定义的命令。**要执行其后的命令，就要在make命令后明显得指出这个lable(clean)的名字**。这样的方法非常有用，我们可以在一个makefile中定义不用的编译或是和编译无关的命令，比如程序的打包，程序的备份，等等。
 
 ## 3.make是如何工作的
 shell中输入make命令：
@@ -115,12 +115,12 @@ edit : main.o kbd.o command.o display.o insert.o search.o files.o utils.o
 obj = main.o kbd.o command.o display.o insert.o search.o files.o utils.o
 ```
 
-于是，我们就可以很方便地在我们的makefile中以"**$(obj)**"的方式来使用这个变量了，于是我们的改良版makefile就变成下面这个样子：
+于是，我们就可以很方便地在我们的makefile中以"**$(obj)**"的方式来使用这个变量了，于是我们的改良版makefile就变成下面这个样子：<br>
 ```
 obj = main.o kbd.o command.o display.o insert.o search.o files.o utils.o
 
-edit : $(objects)
-	cc -o edit $(objects)
+edit : $(obj)
+	cc -o edit $(obj)
 
 main.o : main.c defs.h
 	cc -c main.c
@@ -147,9 +147,92 @@ utils.o : utils.c defs.h
 	cc -c utils.c
  
 clean :
-	rm edit $(objects)
+	rm edit $(obj)
 ```
-于是如果有新的 .o 文件加入，我们只需简单地修改一下 objects 变量就可以了。
+于是如果有新的 .o 文件加入，我们只需简单地修改一下 obj 变量就可以了。<br>
 
 ## 5.让make自动推导
+GNU的make很强大，它可以**自动推导文件以及文件依赖关系后面的命令**，于是我们就没必要去在每一个[.o]文件后都写上类似的命令，因为，我们的make会自动识别，并自己推导命令。
+
+只要make看到一个[.o]文件，它就会自动的把[.c]文件加在依赖关系中，如果make找到一个whatever.o，那么whatever.c，就会是whatever.o的依赖文件。并且 cc -c whatever.c 也会被推导出来。于是，我们的makefile被变得更加简单。
+
+还是上面的栗子：
+```
+obj = main.o kbd.o command.o display.o insert.o search.o files.o utils.o
+
+edit : $(obj)
+	cc -o edit $(obj)
+
+main.o : main.c defs.h
+kbd.o : kbd.c defs.h command.h
+command.o : command.c defs.h command.h
+display.o : display.c defs.h buffer.h
+insert.o : insert.c defs.h buffer.h
+search.o : search.c defs.h buffer.h
+files.o : files.c defs.h buffer.h command.h
+utils.o : utils.c defs.h
+
+.PHONY : clean
+clean :
+	rm edit $(obj)
+```
+这种方法，也就是make的“隐晦规则”。上面文件内容中，“.PHONY”表示，clean是个伪目标文件。
+
+
+> .PHONY后边的target表示的是一个伪造的target，而不是真实存在的文件target，注意Makefile的target默认是文件。<br>
+> <br>
+> 如果Makefile中有.PHONY，在当前目录下存在其后的文件（这个例子就是目录下存在名为clean的文件），则make clean(clean就是.PHONY后边target)命令无法执行。<br>
+> <br>
+> 如果Makefile中没有.PHONY，则make clean命令不受影响。<br>
+
+## 6.另类风格的makefile
+即然我们的make可以自动推导命令，那么我看到那堆[.o]和[.h]的依赖就有点不爽，那么多的重复的[.h]，能不能把其收拢起来，好吧，没有问题，这个对于make来说很容易，谁叫它提供了自动推导命令和文件的功能呢？来看看最新风格的makefile吧。
+```
+obj = main.o kbd.o command.o display.o insert.o search.o files.o utils.o
+
+edit : $(obj)
+	cc -o edit $(obj)
+
+$(obj) : defs.h
+kbd.o command.o files.o : command.h
+display.o insert.o search.o files.o : buffer.h
+
+.PHONY : clean
+clean :
+	rm edit $(obj)
+```
+
+这种风格，让我们的makefile变得很简单，但我们的**文件依赖关系就显得有点凌乱**了。鱼和熊掌不可兼得。还看你的喜好了。我是不喜欢这种风格的，一是文件的依赖关系看不清楚，二是如果文件一多，要加入几个新的.o文件，那就理不清楚了。
+
+## 7.清空目标文件的规则
+每个Makefile中都应该写一个清空目标文件（.o和执行文件）的规则，这不仅便于重编译，也很利于保持文件的清洁。一般风格为：
+```
+clean :
+	rm edit $(obj)
+```
+更稳健的做法是：
+```
+.PHONY : clean
+clean :
+	-rm edit $(obj)
+```
+前面说过，.PHONY意思表示clean是一个“伪目标”。而在rm命令前面加了一个小减号的意思就是，也许某些文件出现问题，但不要管，继续做后面的事。当然，clean的规则不要放在文件的开头，不然，这就会变成make的默认目标，相信谁也不愿意这样。不成文的规矩是:
+> “lean从来都是放在文件的最后”。
+
+# 上面就是一个makefile的概貌，也是makefile的基础，下面还有很多makefile的相关细节。
+
+# 四、Makefile总述
+## 1.Makefile里面有什么？
+Makefile里主要包含了五个东西：
+> 显式规则: 显式规则说明了，如何生成一个或多的的目标文件。这是由Makefile的书写者明显指出，要生成的文件，文件的依赖文件，生成的命令。<br>
+> <br>
+> 隐晦规则 :由于我们的make有自动推导的功能，所以隐晦的规则可以让我们比较粗糙地简略地书写Makefile，这是由make所支持的。<br>
+> <br>
+> 变量定义 :在Makefile中我们要定义一系列的变量，变量一般都是字符串，这有点像c语言中的宏，当Makefile被执行时，其中的变量都会被扩展到相应的引用位置上。<br>
+> <br>
+> 文件指示 <br>
+>> 在一个Makefile中引用另一个Makefile，就像C语言中的include一样<br>
+>> 据某些情况指定Makefile中的有效部分，就像C语言中的预编译#if一样<br>
+> 注释<br>
+
 
