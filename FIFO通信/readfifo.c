@@ -6,7 +6,7 @@
 #include<fcntl.h>
 #include<errno.h>
 
-#define PATH "./fifo"
+#define PATH "./fifo"	// FIFO文件创建再本地
 #define SIZE 128
 
 int main(){
@@ -15,6 +15,7 @@ int main(){
 	// 判断是否有FIFO文件，如果没有，则使用mkfifo函数创建
 	if(access(PATH, F_OK) == -1){
 		if (mkfifo (PATH,0777) == -1){
+			// 创建FIFO失败，输出错误信息
 			perror ("mkefifo error");
 			exit(0);
 		}
@@ -32,7 +33,8 @@ int main(){
 	// 设置Buf缓冲区，使用无限循环，不断地从FIFO中读出内容
 	char Buf[SIZE];
 	while(1){
-		ssize_t s = read(fd,Buf,sizeof(Buf));
+		// 将fd中内容读入Buf，并返回读入字符数量
+		ssize_t s = read(fd, Buf, sizeof(Buf));
 
 		if (s<0){
 			perror("read error");
