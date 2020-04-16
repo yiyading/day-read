@@ -39,3 +39,24 @@ extern long pfcount;
 1501         if (unlikely(kmmio_fault(regs, address)))
 1502                 return;
 ```
+
+## 2.添加系统调用号
+在系统调用表/arch/x96/entry/syscalls/syscall_64.tbl中添加自己的系统调用号
+```c
+357 433     common  fspick                  __x64_sys_fspick
+358 434     common  pidfd_open              __x64_sys_pidfd_open
+359 435     common  clone3                  __x64_sys_clone3/ptregs
+360 2020    64      pf_count                __x64_sys_pf_count
+```
+
+## 3.添加调用函数
+在 /kernel/sys.c 中添加系统调用函数，其中SYSCALL_DEFINE0(name)是宏，其定义在/include/linux/syscalls.h文件中，相当于asmlinkage long sys_pf_count(void){...}
+```c
+196 SYSCALL_DEFINE0(pf_count)
+197 {
+198         printk("entering syscall pf_count\n");
+199         return pfcount;
+200 }
+```
+
+## 4.编译内核并重启
