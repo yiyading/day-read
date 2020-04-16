@@ -9,8 +9,8 @@
 
 # 操作步骤
 ## 1.添加pfconut变量
-在**/usr/src/linux-version_number/include/linux/mm.h**中添加变量声明
-```#c
+在**/usr/src/linux-versio__nnumber/include/linux/mm.h**中添加变量声明
+```c
 // 前三个时文件自带的声明，pfcount是我们自己的声明
 extern unsigned long totalr_pages;
 extern void * high_memory;
