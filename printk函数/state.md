@@ -29,12 +29,13 @@ printk(KERN_INFO "伊亚玎\n"); //这里可以使用数字代替KERN_INFO，即
 > #define MINIMUM_CONSOLE_LOGLEVEL　 1　 　/*可以使用的最小日志级别*/<br>
 > #define DEFAULT_CONSOLE_LOGLEVEL 　7     /*比KERN_DEBUG 更重要的消息都被打印*/<br>
 > int console_printk[4] = {<br>
->	DEFAULT_CONSOLE_LOGLEVEL,   /*控制台日志级别，优先级高于该值的消息将在控制台显示*/<br>
->	DEFAULT_MESSAGE_LOGLEVEL,   /*默认消息日志级别，printk没定义优先级时，打印这个优先级以上的消息*/<br>
->	MINIMUM_CONSOLE_LOGLEVEL,   /*最小控制台日志级别，控制台日志级别被设置的最小值（最高优先级）*/<br>
->	DEFAULT_CONSOLE_LOGLEVEL,   /* 默认的控制台日志级别*/<br>
+>     DEFAULT_CONSOLE_LOGLEVEL,   /*控制台日志级别，优先级高于该值的消息将在控制台显示*/<br>
+>     DEFAULT_MESSAGE_LOGLEVEL,   /*默认消息日志级别，printk没定义优先级时，打印这个优先级以上的消息*/<br>
+>     MINIMUM_CONSOLE_LOGLEVEL,   /*最小控制台日志级别，控制台日志级别被设置的最小值（最高优先级）*/<br>
+>     DEFAULT_CONSOLE_LOGLEVEL,   /* 默认的控制台日志级别*/<br>
 > }<br>
-在进行查看的时候，可以使用命令 cat /proc/sys/kernel/printk来查看这四个值。<br>
+> <br>
+> 在进行查看的时候，可以使用命令 cat /proc/sys/kernel/printk来查看这四个值。<br>
 
 可以通过修改文件/proc/sys/kernel/printk中的第一个值来更改当前的控制台日志级别。在下面的模块函数中控制台所使用的日志级别均为KERN_WARNING级别，当日志级别高于console_loglevel（控制台日志级别）时，消息才能在控制台显示出来。<br>
 
