@@ -8,7 +8,7 @@
 * 二是和代码相关联的数据集。这里的“和代码相关联的数据集指的是数据段和进程控制块”。进程是一种动态描述，但是并不代表所有的进程都在运行。(进程在内存中因策略或调度需求，会处于各种状态)。<br>
 
 ## 操作系统执行程序过程
-![操作系统执行程序过程](https://github.com/yiyading/day-read/blob/master/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%BF%87%E7%A8%8B.png)
+![操作系统执行程序过程](https://github.com/yiyading/day-read/blob/master/img/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F%E8%BF%87%E7%A8%8B.png)<br>
 
 进程是动态运行的实例，但是并不是所有的进程都在运行。因为程序被加载到内存中后，它的执行由进程的状态以及调度算法等来决定。<br>
 
