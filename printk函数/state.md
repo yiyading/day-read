@@ -64,4 +64,6 @@ module_init(book_init);
 module_exit(book_exit);
 ```
 
-控制台（这里指的是虚拟终端 Ctrl+Alt+(F1~F6)）加载模块以后，控制台给出的信息为6~9行中要求输出的信息，我们在伪终端（如果对伪终端不是很清楚可以看相关的内容）上运行命令tail -n 10 /var/log/messages查看日志文件刚才得到的运行记录可以发现messages中的值为KERN_WARNING级别之后所要求输出到信息值。值。而如果我们在文件syslog和kern-log中查看系统日志文件，一般情况下可以得到所有的输出信息。<br>
+控制台（这里指的是虚拟终端 Ctrl+Alt+(F1~F6)）加载模块以后
+
+控制台给出的信息为6~9行中要求输出的信息，我们在伪终端（如果对伪终端不是很清楚可以看相关的内容）上运行命令tail -n 10 /var/log/messages查看日志文件刚才得到的运行记录可以发现messages中的值为KERN_WARNING级别之后所要求输出到信息值。值。而如果我们在文件syslog和kern-log中查看系统日志文件，一般情况下可以得到所有的输出信息。<br>
