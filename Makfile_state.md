@@ -1,4 +1,4 @@
-[原文链接](https://blog.csdn.net/haoel/java/article/details/2889)
+[原文链接](https://blog.csdn.net/haoel/article/details/2890)
 # 一、概述
 什么是makefile？或许很多Winodws的程序员都不知道这个东西，因为那些Windows的IDE都为你做了这个工作，但我觉得要作一个优秀的和professional的程序员，makefile还是要懂。这就好像现在有这么多的HTML的编辑器，但如果你想成为一个专业人士，你还是要了解HTML的标识的含义。特别在Unix下的软件编译，你就不能不自己写makefile了，会不会写makefile，从一个侧面说明了一个人是否具备完成大型工程的能力。
 
@@ -389,7 +389,7 @@ print : \*.c
 在一些大的工程中，有大量的源文件，我们通常的做法是把这许多的源文件分类，并存放在不同的目录中。所以，当make需要去找寻文件的依赖关系时，你可以在文件前加上路径，但最好的方法是把一个路径告诉make，让make在自动去找。
 
 Makefile文件中的特殊变量“VPATH”就是完成这个功能的，如果没有指明这个变量，make只会在当前的目录中去找寻依赖文件和目标文件。如果定义了这个变量，那么，make就会在当前目录无法找到文件时，到指定目录去找寻文件
-> VPATH = src:../headers
+> VPATH = src : ../headers
 > <br>
 > 上边定义了 **src** 和 **../headers** 两个目录，make回按照这个顺序机型搜索
 > <br>
@@ -411,4 +411,62 @@ vapth使用方法中的\<pattern\>需要包含"%"字符。"%"的意思是匹配�
 vpath %.c foo
 vpath %   blish
 vpath %.c bar
+
+表示“.c”结尾的文件，现在“foo”目录，然后时“blish”目录，最后时“bar”目录
+
+vpath %.c foo:bar
+vpath %
+
+表示“.c”结尾的文件，先在“foo”目录，然后时“bar”目录，最后才是“blish”目录
 ```
+
+## 5.伪目标
+前面一个例子我们提到了“clean”目标，这是一个“伪目标”
+```
+clean:
+	rm *.o temp
+```
+正像我们前面例子中的“clean”一样，即然我们生成了许多文件编译文件，我们也应该提供一个清除它们的“目标”以备完整地重编译而用。 （以“make clean”来使用该目标）
+
+因为，我们并不生成“clean”这个文件。**“伪目标”并不是一个文件，只是一个标签**，由于“伪目标”不是文件，所以make无法生成它的依赖关系和决定它是否要执行。我们只有通过显示地指明这个“目标”才能让其生效。当然，“伪目标”的取名不能和文件名重名，不然其就失去了“伪目标”的意义了。
+
+当然，为了避免和文件重名的这种情况，我们可以使用一个特殊的标记“.PHONY”来显示地指明一个目标是“伪目标”，向make说明，不管是否有这个文件，这个目标就是“伪目标”。
+```
+.PHONY : clean
+clean:
+	rm *.o temp
+```
+使用上边这个声明，无论是否由“clean”这个文件，只要使用命令“make clean”都是运行**“clean”**这个伪目标
+
+伪目标一般没有依赖的文件。但是，我们也可以为伪目标指定所依赖的文件。伪目标同样可以作为“默认目标”，只要将其放在第一个。一个示例就是，如果你的Makefile需要一口气生成若干个可执行文件，但你只想简单地敲一个make完事，并且，所有的目标文件都写在一个Makefile中，那么你可以使用“伪目标”这个特性：
+```
+all : prog1 prog2 prog3
+.PHONY : all
+prog1 : prog1.o utils.o
+	cc -o prog1 prog1.o utils.o
+
+prog2 : prog2.o
+	cc -o prog2 prog2.o
+
+prog3 : prog3.o sort.o utils.o
+	cc -o prog3 prog3.o sort.o utils.o
+```
+
+我们知道，Makefile中的第一个目标会被作为其默认目标。我们声明了一个“all”的伪目标，其依赖于其它三个目标。由于伪目标的特性是，总是被执行的，所以其依赖的那三个目标就总是不如“all”这个目标新。所以，其它三个目标的规则总是会被执行，也就达到了我们一口气生成多个目标的目的。
+
+“.PHONY : all”声明了“all”这个目标为“伪目标”
+
+伪目标同样也可成为依赖。看下面的例子：
+```
+.PHONY: cleanall cleanobj cleandiff
+
+cleanall : cleanobj cleandiff
+	rm program
+
+cleanobj :
+	rm *.o
+
+cleandiff :
+	rm *.diff
+```
+make clean”将清除所有要被清除的文件。“cleanobj”和“cleandiff”这两个伪目标有点像“子程序”的意思。我们可以输入“make cleanall”和“make cleanobj”和“make cleandiff”命令来达到清除不同种类文件的目的。
