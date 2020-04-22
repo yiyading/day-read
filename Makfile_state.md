@@ -34,11 +34,12 @@ make命令执行时，需要一个 Makefile 文件，以告诉make命令需要�
 
 ## 1.Makefile的规则
 Makefile的规则：<br>
-> target ...: dependence ...<br>
->     commend<br>
->     ...<br>
->     ...<br>
-
+```
+target ...: dependence ...<br>
+	commend<br>
+	...<br>
+	...<br>
+```
 target也就是一个目标文件，可以是Object File，也可以是执行文件。还可以是一个标签（Label）。<br>
 
 dependence是生成target所依赖的文件。<br>
@@ -330,4 +331,41 @@ foo.o : foo.c defs.h	# foo模块
 > <br>
 > 2.如果生成（或更新）foo.o文件。也就是那个cc命令，其说明了，如何生成foo.o这个文件。（当然foo.c文件include了defs.h文件）
 
+## 2.规则的语法
+```
+target : dependence
+	command
+	...
 
+或是这样：
+
+target : dependence ; command
+	command
+	...	
+```
+targets是文件名，以空格分开，可以使用通配符。一般来说，我们的目标基本上是一个文件，但也有可能是多个文件。
+
+command是命令行，如果其不与“target:dependence”在一行，那么，必须以[Tab键]开头，如果和dependence在一行，那么可以用分号做为分隔。（见上）
+
+dependence是目标所依赖的文件（或依赖目标）。如果其中的某个文件要比目标文件要新，那么，目标就被认为是“过时的”，被认为是需要重生成的。这个在前面已经讲过了。
+
+如果命令太长，你可以使用反斜框（‘/’）作为换行符。make对一行上有多少个字符没有限制。规则告诉make两件事，文件的依赖关系和如何成成目标文件。例如：
+```
+target : dependence
+	this is one command /
+	this is one-one command
+```
+
+一般来说，make会以UNIX的标准Shell，也就是/bin/sh来执行命令。
+
+## 3.在规则中使用通配符
+如果我们想定义一系列比较类似的文件，我们很自然地就想起使用通配符。make支持三个通配符：\* ? [...] 这是和Unix的B-Shell是相同的。
+
+波浪号（“~”）字符在文件名中也有比较特殊的用途。如果是“~/test”，这就表示当前用户的$HOME目录下的test目录。而“~hchen/test”则表示用户hchen的宿主目录下的test目录。（这些都是Unix下的小知识了，make也支持）而在Windows或是MS-DOS下，用户没有宿主目录，那么波浪号所指的目录则根据环境变量“HOME”而定。
+
+通配符代替了你一系列的文件，如“\*.c”表示所以后缀为c的文件。一个需要我们注意的是，如果我们的文件名中有通配符，如：“\*”，那么可以用转义字符“\”，如“\\\*”来表示真实的“\*”字符，而不是任意长度的字符串。
+
+举个例子：
+```
+
+```
