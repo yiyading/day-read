@@ -401,3 +401,14 @@ Makefile文件中的特殊变量“VPATH”就是完成这个功能的，如果�
 2. vpath \<pattern\>：清除符合模式\<pattern\>的文件的搜索目录
 
 3. vpath：清除所有已被设置好了的文件搜索目录
+
+vapth使用方法中的\<pattern\>需要包含"%"字符。"%"的意思是匹配零或若干字符，例如，“%.h”表示所有以“.h”结尾的文件。\<pattern\>指定了要搜索的文件集，而\<directories\>则指定了\<pattern\>的文件集的搜索的目录。例如：
+> vpath %.h ../headers
+该语句表示，要求make在“../headers”目录下搜索所有以“.h”结尾的文件。（**如果某文件在当前目录没有找到的话**）
+
+我们可以连续地使用vpath语句，以指定不同搜索策略。如果连续的vpath语句中出现了相同的\<pattern\>，或是被重复了的\<pattern\>，那么，make会按照vpath语句的先后顺序来执行搜索。如：
+```
+vpath %.c foo
+vpath %   blish
+vpath %.c bar
+```
