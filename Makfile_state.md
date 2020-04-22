@@ -380,6 +380,7 @@ print : \*.c
 上边这个例子说明通配符也可以在我们的规则中，目标print依赖于所有的[\*.c]文件。其中 &? 是一个自动化变量，后边会有描述
 
 > obj = \*.o
+
 上面这个例子，表示通配符也可以用在变量中。Makefile中的变量其实就是C/C++中的宏，如果需要通配符在变量中展开，也就是让obj的值是所有[\*.o]文件名的集合，那么可以这样做：
 > obj := $(wildcard \*.o)
 这种方法由关键词 **wildcard** 指出，关于Makefile关键词，后边会有讨论
@@ -395,11 +396,8 @@ Makefile文件中的特殊变量“VPATH”就是完成这个功能的，如果�
 > 目录由冒号 **:** 分隔
 
 另一种设置文件搜索路径的方法是使用make的 **vpath** 关键字（注意，它是全小写的），这不是变量，这是一个make的**关键字**，这和上面提到的那个VPATH变量很类似，但是它更为灵活。它可以指定不同的文件在不同的搜索目录中。这是一个很灵活的功能。它的使用方法有三种：
-1. vpath <pattern> <directories>
-为符合模式<pattern>的文件指定搜索目录<directories>
+1. vpath <pattern> <directories>：为符合模式<pattern>的文件指定搜索目录<directories>
 
-2. vpath <pattern>
-清除符合模式<pattern>的文件的搜索目录
+2. vpath <pattern>：清除符合模式<pattern>的文件的搜索目录
 
-3. vpath
-清除所有已被设置好了的文件搜索目录
+3. vpath：清除所有已被设置好了的文件搜索目录
