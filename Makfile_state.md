@@ -367,5 +367,14 @@ target : dependence
 
 举个例子：
 ```
+clean:
+	rm -f *.o
+```
+上边这个例子是OS Shell所支持的通配符，这是在命令中的通配符
 
 ```
+print : \*.c
+	lpr -p %?
+	touch print
+```
+上边这个例子说明通配符也可以在我们的规则中，目标print依赖于所有的[\*.c]文件
