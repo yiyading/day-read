@@ -32,7 +32,7 @@ int main(int argc, char *argv[]){
 		data->msg_type = 1;
 		strcpy(data->text, buffer);
 
-		// 像队列里发送数据
+		// 向队列里发送数据
 	//	i = msgsnd(msgid, (void *)data, MAX_TEXT, 0);
 		msgsnd(msgid, data, MAX_TEXT, 0);
 		if(i == -1){
