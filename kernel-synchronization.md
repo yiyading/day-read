@@ -163,4 +163,4 @@ linux中最常见的锁：自旋锁
 
 自旋锁不应该被长时间持有，因为被征用的自旋锁使得请求它的线程在等待锁重新可用时**自旋**，浪费处理器时间。
 
-自旋锁被定义在**/include/linux/spinlock_types.h**
+自旋锁被定义在**/include/linux/spinlock\_types.h**
