@@ -139,4 +139,28 @@ atomic_inc(&v);		/*v=v+1=7（原子地)*/
 printk("%d\n", atomic_read(&v);		//打印7
 ```
 
+### 原子位操作
+1. 操作函数的参数是**一个指针**和**一个位号**，**第0位**是给定地址的**最低有效位**
+2. 原子位操作中**没有特殊的数据类型**，例如：set_bit(0, &word);
 
+原子位操作函数
+```c
+viod set_bit(int nr,void *addr)			//原子地设置addr所指对象的第nr位
+viod clear_bit(int nr,void *addr)		//原子地清空addr所指对象的第nr位
+viod change_bit(int nr,void *addr)		//原子地翻转addr所指对象的第nr位
+int test_and_set_bit(int nr,void *addr)		//原子地设置addr所指对象的第nr位，并返回原先的值
+int test_and_clear_bit(int nr,void *addr)	//原子地清空addr所指对象的第nr位，并返回原先的值
+int test_and_change_bit(int nr,void *addr)	//原子地翻转addr所指对象的第nr位，并返回原先的值
+int test_bit(int nr,void *addr)			//原子地返回addr所指对象的第nr位
+```
+
+## 3.Spin lock（自旋锁）
+linux中最常见的锁：自旋锁
+1. 自旋锁最多只能被一个可执行线程持有。
+2. 原子的test-and-set。
+3. 如果一个线程试图获得一个被争用的自旋锁，那么该线程就会一直进行**忙循环—旋转—等待锁重新可用**。
+4. 锁未被争用，请求锁的执行线程便立即得到它，继续执行。
+
+自旋锁不应该被长时间持有，因为被征用的自旋锁使得请求它的线程在等待锁重新可用时**自旋**，浪费处理器时间。
+
+自旋锁被定义在**/include/linux/spinlock_types.h**
