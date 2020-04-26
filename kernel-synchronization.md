@@ -1,3 +1,5 @@
+OS:ubuntu18.0.4.LTS
+kernel:5.3
 # 一、kernel synchronization
 
 ## 1.用户空间的同步
@@ -163,4 +165,25 @@ linux中最常见的锁：自旋锁
 
 自旋锁不应该被长时间持有，因为被征用的自旋锁使得请求它的线程在等待锁重新可用时**自旋**，浪费处理器时间。
 
-自旋锁被定义在**/include/linux/spinlock\_types.h**
+自旋锁被定义在</include/linux/spinlock\_types.h>
+```c
+12 #if defined(CONFIG_SMP)
+13 # include <asm/spinlock_types.h>
+14 #else
+15 # include <linux/spinlock_types_up.h>
+16 #endif
+
+// include<asm/spinlock_types.h>中定义了arch_spinlock_t
+typedef struct arch_spinlock{
+	union{
+		__ticketpair_t head_tail;
+		struct __raw_tickets{
+			__ticket_t head, tail;
+		}tickets;
+	};
+}arch_spinlock_t;
+
+// include<linux/spinlock_types_up.h>定义了arch
+```
+
+
