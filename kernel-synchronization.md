@@ -173,6 +173,32 @@ linux中最常见的锁：自旋锁
 15 # include <linux/spinlock_types_up.h>
 16 #endif
 
+20 typedef struct raw_spinlock {
+21         arch_spinlock_t raw_lock;
+22 #ifdef CONFIG_DEBUG_SPINLOCK
+23         unsigned int magic, owner_cpu;
+24         void *owner;
+25 #endif
+26 #ifdef CONFIG_DEBUG_LOCK_ALLOC
+27         struct lockdep_map dep_map;
+28 #endif
+29 } raw_spinlock_t;
+
+
+61 typedef struct spinlock {
+62         union {
+63                 struct raw_spinlock rlock;
+64
+65 #ifdef CONFIG_DEBUG_LOCK_ALLOC
+66 # define LOCK_PADSIZE (offsetof(struct raw_spinlock, dep_map))
+67                 struct {
+68                         u8 __padding[LOCK_PADSIZE];
+69                         struct lockdep_map dep_map;
+70                 };
+71 #endif
+72         };
+73 } spinlock_t;
+
 // include<asm/spinlock_types.h>中定义了arch_spinlock_t
 typedef struct arch_spinlock{
 	union{
@@ -183,7 +209,31 @@ typedef struct arch_spinlock{
 	};
 }arch_spinlock_t;
 
-// include<linux/spinlock_types_up.h>定义了arch
+// include<linux/spinlock_types_up.h>定义了arch_spinlock_t
+17 typedef struct {
+18         volatile unsigned int slock;
+19 } arch_spinlock_t;
 ```
 
+自旋锁的使用
+1. 在中断处理程序中使用自旋锁（不能使用信号量，因为信号量会导致睡眠）
+2. 自旋锁针对**SMP以及本地内核抢占**
+3. 获得锁之前，首先应该禁止本地中断（在当前处理器上的中断请求）
+```c
+spinlock_t mr_lock = SPIN_LOCK_UNLOCKED;
+spin_lock(&mr_lock);
+/*临界区...*/
+spin_unlock(&mr_lock);
+```
 
+内核提供了**禁止中断同时请求锁**的接口：
+```c
+DEFINE_SPINLOCK(me_lock);
+unsigned long flags;
+
+spin_lock_irqsave(&mr_lock, flags);
+/*临界区...*/
+spin_unlock_irqresore(&mr_lock, flags);
+```
+
+自旋锁在内核中有许多变种，如对下半部而言，可以使用**spin_lock_bh()来获得特定锁并且关闭下半部执行**
