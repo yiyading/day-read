@@ -1,0 +1,1 @@
+cmd_/study/my/day-read/2020416查看系统缺页次数/src1/pfcount.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /study/my/day-read/2020416查看系统缺页次数/src1/pfcount.ko /study/my/day-read/2020416查看系统缺页次数/src1/pfcount.o /study/my/day-read/2020416查看系统缺页次数/src1/pfcount.mod.o ;  true

@@ -1,7 +1,3 @@
-
-
-
-
 int route_struct_init(void){
 	struct task_struct *task = current;
 	int i;

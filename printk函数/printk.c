@@ -1,4 +1,4 @@
- #include <linux/init.h>
+#include <linux/init.h>
 #include <linux/module.h>
 MODULE_LICENSE("Dual BSD/GPL");
 static int book_init(void)

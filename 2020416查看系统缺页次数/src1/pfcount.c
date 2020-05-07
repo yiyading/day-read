@@ -13,7 +13,7 @@
 
 #define SUB_DIR_NAME	"pf"
 #define PROC_FS_NAME	"pfcount"
-
+extern long pfcount;
 
 struct proc_dir_entry *parent = NULL;
 static int proc_open(struct inode *inode, struct file *filp);
