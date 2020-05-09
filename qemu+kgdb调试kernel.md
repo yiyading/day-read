@@ -25,12 +25,12 @@ gdb命令告诉stub下一步该做什么，当stub收到继续执行的命令时
 
 调试示意图如下
 
-![qemu+kgdb1]()
+![qemu+kgdb1](https://github.com/yiyading/day-read/blob/master/img/qemu%2Bkgdb1.png)
 
 # 三、实验流程
 编译内核，要注意在设置config时KGDB是开启的。
 > 在执行make之前，通常要执行make menuconfig或其他config命令，下面这张图片如果之前编译时勾选过，就不需要重新编译了，如果没有勾选，则勾选之后重新编译。
-![qemu+kgdb2]()
+![qemu+kgdb2](https://github.com/yiyading/day-read/blob/master/img/qemu%2Bkgdb2.png)
 
 * 以下进行的目录把编译好的内核放在 ~ 目录下进行的。
 
@@ -105,14 +105,14 @@ sudo apt-get install -y qemu
 ```
 sudo qemu-system-x86_64 -S -kernel bzImage -initrd initrd.img-5.3.0 -m 1024
 
-// -m表示非配内存大小为128Mb, -S表示以调试模式启动，暂定在启动界面；
+// -m表示非配内存大小为1024Mb, -S表示以调试模式启动，暂定在启动界面；
 // -S表示“冷冻”虚拟机，等待调试器发出继续运行命令；
 // -kernel表示要调试的内核镜像
 注： 这里并没有制作文件系统，大家可以更具自己的需求添加
 ```
 
 同时摁ctrl+alt+2进入qemu命令行界面，输入**gdbserver tcp::4321**，建立并等待gdb连接
-![qemu+kgdb3]()
+![qemu+kgdb3](https://github.com/yiyading/day-read/blob/master/img/qemu%2Bkgdb.png)
 
 在kDebug目录下打开另一个终端
 ```
@@ -122,5 +122,5 @@ gdb vmlinux
 // 在gdb下输入如下命令
 target remote localhost:4321
 ```
-![qemu+kgdb4]()
+![qemu+kgdb4](https://github.com/yiyading/day-read/blob/master/img/qemu%2Bkgdb4.png)
 
