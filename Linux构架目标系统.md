@@ -32,11 +32,17 @@ sudo apt install git bc bison flex libssl-dev make libc6-dev libncurses5-dev
 
 # 下载交叉编译工具链
 git clone https://github.com/raspberrypi/tools ~/tools
-```
 
-1. 首先将交叉编译环境加入系统环境变量，如下图所示
+# 将交叉编译器加入系统环境变量，这一步需要根据target的内核来选择交叉编译器，
+echo PATH=\$PATH:~/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin >> ~/.bashrc
+source ~/.bashrc
+
+# 如果上述的交叉编译器无法使用，使用下列命令选择tools中另一个交叉编译位置
+echo PATH=\$PATH:~/tools/arm-bcm2708/arm-linux-gnueabihf/bin >> ~/.bashrc
+source ~/.bashrc
 
 ![Linux架构目标操作系统1](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F1.png)
+```
 
 2. 下载linux源码，但是在下载过程中，系统发生了如下的报错：
 
