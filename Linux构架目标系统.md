@@ -22,19 +22,19 @@ Kernel building过程可以在target（树莓派）端或者host（开发机）�
 
 1. 首先将交叉编译环境加入系统环境变量，如下图所示
 
-![Linux架构目标操作系统1]()
+![Linux架构目标操作系统1](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F1.png)
 
 2. 下载linux源码，但是在下载过程中，系统发生了如下的报错：
 
-![Linux架构目标操作系统2]()
+![Linux架构目标操作系统2](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F2.png)
 
 上面这种报错的原因是curl的postBuffer的默认值太小，我们需要调整它的大小。我们将postBuffer的值配置成500M，操作步骤和结构如下图所示：
 
-![Linux架构目标操作系统3]()
+![Linux架构目标操作系统3](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F3.png)
 
 3. 解决报错后，继续执行下载linux源码操作
 
-![Linux架构目标操作系统4]()
+![Linux架构目标操作系统4](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F4.png)
 > 在进行git clone时，可能会有各种各样原因造成速度很慢，这时请自行百度/google搜素解决办法，或者更换网络。
 
 4. 进入包含linux源码的linux文件夹，构建源文件和设备树文件
@@ -47,7 +47,7 @@ KERNEL=kernel7
 make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2709_defconfig
 ```
 随后终端显示
-![Linux架构目标操作系统5]()
+![Linux架构目标操作系统5](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F5.png)
 
 > 我本机上的交叉编译环境没有成功添加到系统环境路径，因此我是用的是绝对路径。<br>
 > 在[树莓派官方指导](https://www.raspberrypi.org/documentation/linux    /kernel/building.md#choosing_sources)中，给出了针对不同机型该步骤的命令，我的设备是3b。
@@ -59,7 +59,7 @@ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihg- zImage modules dtbs
 ```
 
 可在linux/arch/arm/boot/目录下查看刚刚编译生成的文件
-![Linux架构目标操作系统6]()
+![Linux架构目标操作系统6](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F6.png)
 
 ## 2.内核写入SD卡
 上面第1步实现了对树莓派内核在host端的交叉编译，使用这种方法的优点在于编译速度较快，因为host端的配置一般都高于树莓派。
@@ -73,14 +73,14 @@ SD卡需要进行格式化。
 使用lsblk命令查看设备。
 
 VMware未识别sd卡:<br>
-![Linux架构目标操作系统7]()
+![Linux架构目标操作系统7](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F7.png)
 
 VMware识别sd卡：<br>
-![Linux架构目标操作系统8]()
+![Linux架构目标操作系统8](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F8.png)
 > sdb1和sdb2即未SD卡的分区。
 
 更换SD卡的挂载目录<br>
-![Linux架构目标操作系统9]()
+![Linux架构目标操作系统9](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F9.png)
 
 输入以下命令进行模块安装：
 ```
@@ -101,7 +101,7 @@ sudo umount mnt/ext4
 ## 3.内核剪裁-构建智能家居监控系统
 使用make menuconfig指令进入模块选择，剪裁内核
 
-![Linux架构目标操作系统20]()
+![Linux架构目标操作系统20](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F20.png)
 
 在选择功能时，有以下三个选项
 > 1. Y：该功能编译进内核
