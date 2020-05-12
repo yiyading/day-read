@@ -15,10 +15,24 @@
 8. 构建并安装款不同于根文件系统、用于应用开发的其他文件系统（不少于一款）。
 
 # 三、试验过程与结果
+> 在试验过程中需要clone git的一些代码，挂北大vpn能几百倍的提速。
 ## 1.内核编译
 Kernel building过程可以在target（树莓派）端或者host（开发机）端进行，这两种方法都可以在[树莓派官方指导](https://www.raspberrypi.org/documentation/linux/kernel/building.md#choosing_sources)中查看具体步骤。
 
 本次实验使用的是host端交叉编译，然后传入树莓派，其操作步骤比target端多，但速度较快。
+
+首先，需要合适的Linux交叉编译主机。倾向于使用Ubuntu。由于Raspbian也是Debian发行版，因此意味着许多方面都相似，例如命令行。
+
+对于大多数win OS的计算机，使用VMware能够模拟Ubuntu OS。
+
+1. 安装所需要的依赖项和交叉编译工具链
+```
+# 如果在操作过程中提示没有某一个包，按照提示安装即可，如果无法安装，百度搜索
+sudo apt install git bc bison flex libssl-dev make libc6-dev libncurses5-dev
+
+# 下载交叉编译工具链
+git clone https://github.com/raspberrypi/tools ~/tools
+```
 
 1. 首先将交叉编译环境加入系统环境变量，如下图所示
 
