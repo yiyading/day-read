@@ -16,6 +16,7 @@
 
 # 三、试验过程与结果
 > 在试验过程中需要clone git的一些代码，挂北大vpn能几百倍的提速。
+
 ## 1.内核编译
 Kernel building过程可以在target（树莓派）端或者host（开发机）端进行，这两种方法都可以在[树莓派官方指导](https://www.raspberrypi.org/documentation/linux/kernel/building.md#choosing_sources)中查看具体步骤。
 
@@ -40,11 +41,17 @@ source ~/.bashrc
 # 如果上述的交叉编译器无法使用，使用下列命令选择tools中另一个交叉编译位置
 echo PATH=\$PATH:~/tools/arm-bcm2708/arm-linux-gnueabihf/bin >> ~/.bashrc
 source ~/.bashrc
-
-![Linux架构目标操作系统1](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F1.png)
 ```
+> 下图为VMware中命令的输入
+![Linux架构目标操作系统1](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F1.png)
 
-2. 下载linux源码，但是在下载过程中，系统发生了如下的报错：
+
+2. 下载linux源码并构建源文件和设备文件
+```
+# 本次实验只需下载当前分支的最小源代码树，使用如下命令
+git clone --depth=1 https://github.com/raspberrypi/linux
+```
+在下载源代码树时，出现如下报错：
 
 ![Linux架构目标操作系统2](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F2.png)
 
@@ -52,37 +59,41 @@ source ~/.bashrc
 
 ![Linux架构目标操作系统3](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F3.png)
 
-3. 解决报错后，继续执行下载linux源码操作
+ 解决报错后，继续执行下载linux源码操作
 
 ![Linux架构目标操作系统4](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F4.png)
-> 在进行git clone时，可能会有各种各样原因造成速度很慢，这时请自行百度/google搜素解决办法，或者更换网络。
 
-4. 进入包含linux源码的linux文件夹，构建源文件和设备树文件
-执行如下命令:
-``` 
-cd ./linux
+```
+# 针对不同的树莓派设备，输入以下命令来构建源文件和设备文件
+# KERNEL不同是因为不同的设备使用不同的内核
+# For Pi 1, Pi Zero, Pi Zero W, or Compute Module 
+cd linux
+KERNEL=kernel
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcmrpi_defconfig
 
+# For Pi 2, Pi 3, Pi 3+, or Compute Module 3
+cd linux
 KERNEL=kernel7
-
 make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2709_defconfig
+
+# For Raspberry Pi 4
+cd linux
+KERNEL=kernel7l
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcm2711_defconfig
+
+# 根据不同树莓派型号选择以上不同的命令构建源文件和设备文件后，执行以下操作
+# 该步骤的编译时间可能会比较长，可以使用make -j选项增加线程数，提升速度
+# 内核zImage，模块module和设备树dtbs
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage modules dtbs
 ```
-随后终端显示
+上述步骤执行第一部后，终端显示<br>
 ![Linux架构目标操作系统5](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F5.png)
-
-> 我本机上的交叉编译环境没有成功添加到系统环境路径，因此我是用的是绝对路径。<br>
-> 在[树莓派官方指导](https://www.raspberrypi.org/documentation/linux    /kernel/building.md#choosing_sources)中，给出了针对不同机型该步骤的命令，我的设备是3b。
-
-
-然后执行如下命令编译生成zImage，模块module和设备树dtbs。
-```
-make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihg- zImage modules dtbs
-```
 
 可在linux/arch/arm/boot/目录下查看刚刚编译生成的文件
 ![Linux架构目标操作系统6](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F6.png)
 
-## 2.内核写入SD卡
-上面第1步实现了对树莓派内核在host端的交叉编译，使用这种方法的优点在于编译速度较快，因为host端的配置一般都高于树莓派。
+3. 内核写入SD卡
+上面第2步实现了对树莓派内核在host端的交叉编译，使用这种方法的优点在于编译速度较快，因为host端的配置一般都高于树莓派。
 
 我使用的host可thinkpadx1c，可直接插入sd卡。
 
@@ -97,18 +108,21 @@ VMware未识别sd卡:<br>
 
 VMware识别sd卡：<br>
 ![Linux架构目标操作系统8](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F8.png)
-> sdb1和sdb2即未SD卡的分区。
+> sdb1和sdb2即SD卡的分区。
 
 更换SD卡的挂载目录<br>
 ![Linux架构目标操作系统9](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F9.png)
 
 输入以下命令进行模块安装：
 ```
+cd linux
+
 sudo env PATH=$PATH make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=mnt/ext4 modules_install
 ```
 
 最后将内核和设备树复制到SD卡上，确保备份旧内核
 ```
+# 下述命令中的#KERNEL替换的是第2步中定义的KERNEL
 sudo cp mnt/fat32/$KERNEL.img mnt/fat32/$KERNEL-backup.img
 sudo cp arch/arm/boot/zImage mnt/fat32/$KERNEL.img
 sudo cp arch/arm/boot/dts/*.dtb mnt/fat32/
@@ -116,9 +130,15 @@ sudo cp arch/arm/boot/dts/overlays/*.dtb* mnt/fat32/overlays/
 sudo cp arch/arm/boot/dts/overlays/README mnt/fat32/overlays/
 sudo umount mnt/fat32
 sudo umount mnt/ext4
-
 ```
-## 3.内核剪裁-构建智能家居监控系统
+
+在上述步骤将内核和设备树复制到SD卡中，另一种选择是将内核复制到同一位置，但使用不同的文件名（例如，kernel-myconfig.img），而不是覆盖kernel.img文件。然后通过编辑config.txt文件以选择Pi引导进入的内核：
+> kernel=kernel-myconfig.img
+这样做的好处是可以使内核与系统和任何自动更新工具管理的内核映像分开，并允许在内核无法启动的情况下轻松地恢复到普通内核。
+
+最后，将SD卡插入树莓派启动。
+
+## 3.内核剪裁-
 使用make menuconfig指令进入模块选择，剪裁内核
 
 ![Linux架构目标操作系统20](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F20.png)
