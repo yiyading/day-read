@@ -18,6 +18,7 @@
 > 在试验过程中需要clone git的一些代码，挂北大vpn能几百倍的提速。
 
 ## 1.内核编译
+
 Kernel building过程可以在target（树莓派）端或者host（开发机）端进行，这两种方法都可以在[树莓派官方指导](https://www.raspberrypi.org/documentation/linux/kernel/building.md#choosing_sources)中查看具体步骤。
 
 本次实验使用的是host端交叉编译，然后传入树莓派，其操作步骤比target端多，但速度较快。
@@ -42,11 +43,12 @@ source ~/.bashrc
 echo PATH=\$PATH:~/tools/arm-bcm2708/arm-linux-gnueabihf/bin >> ~/.bashrc
 source ~/.bashrc
 ```
-> 下图为VMware中命令的输入
+> 下图为VMware中命令的输入:<br>
 ![Linux架构目标操作系统1](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F1.png)
 
 
 2. 下载linux源码并构建源文件和设备文件
+
 ```
 # 本次实验只需下载当前分支的最小源代码树，使用如下命令
 git clone --depth=1 https://github.com/raspberrypi/linux
@@ -93,6 +95,7 @@ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage modules dtbs
 ![Linux架构目标操作系统6](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F6.png)
 
 3. 内核写入SD卡
+
 上面第2步实现了对树莓派内核在host端的交叉编译，使用这种方法的优点在于编译速度较快，因为host端的配置一般都高于树莓派。
 
 我使用的host可thinkpadx1c，可直接插入sd卡。
@@ -138,7 +141,7 @@ sudo umount mnt/ext4
 
 最后，将SD卡插入树莓派启动。
 
-## 3.内核剪裁-
+## 3.内核剪裁
 使用make menuconfig指令进入模块选择，剪裁内核
 
 ![Linux架构目标操作系统20](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F20.png)
@@ -148,19 +151,86 @@ sudo umount mnt/ext4
 > 2. N：该功能不编译进内核
 > 3. M：该功能形成动态模块，需要时加载到内核
 
-硬件平台：树莓派/PC/手机
+**内核剪裁/增加的本质就是在make内核之前，在make menuconfig选项中，选择make时内核中的模块组成。**
 
-软件平台：LINUX/C/Python
+> Gerneral setup
+> > 1) <M> Kernel .config support -> < > Kernel .config support，该选项是将.config文件存入内核<br>
+> > 2) [\*] Profiling support -> [ ] Profiling support，该选项用于系统评测<br>
+> Networking suppory
+> > 取消Amateur Radio support，IrDA subsystem support，Bluetooth subsystem support，WiMAX support，NFC support等用不上的网络通信模块。
 
-需要的设备：
-1. 摄像头
-2. 温度传感器
-3. 湿度传感器
+剪裁上述模块之后，重新交叉编译内核，此时再编译内核，只对更改的模块进行编译，因此make的速度会快很多。
 
-网络：
-1. WiFi
-2. TCP/IP
+make编译之后，进行模块安装，然后将内核和设备树blob复制到SD卡。这些步骤参考上一节的步骤。
 
+然后将SD卡装入树莓派，启动。
+
+**模块的加载与卸载**
+
+远程ssh登录树莓派，可以看到内核已经变为4.19.122-v7+
+
+![Linux架构目标操作系统21]()
+
+在内核剪裁时设置为M的模块，不需要绑定内核，可以动态的加载到内核，常用操作指令如下：
+```
+(1)lsmod(list module,将模块列表显示)，功能是打印出当前内核中已经安装的模块列表。
+(2)insmod（install module，安装模块），功能是向当前内核中去安装一个模块，用法是insmod xxx.ko。
+(3)modinfo（module information，模块信息），功能是打印出一个内核模块的自带信息。用法是modinfo xxx.ko，注意要加.ko，也就是说是一个静态的文件形式。
+(4)rmmod（remove module，卸载模块），功能是从当前内核中卸载一个已经安装了的模块，用法是rmmod xxx.ko  rmmod xxx都可以。
+```
+
+在树莓派中输入lsmod命令，却发生了错误显示
+![Linux架构目标操作系统22]()
+
+
+## 3.构建NFS文件系统
+NFS文件系统由服务端（server）和客户端（client）构成。
+
+树莓派为server，Ubuntu为Client。
+
+server端：
+```
+# 下载nfs服务器端
+sudo apt-get insall ntf-kernel-server
+
+sudo apt-get install portmap
+
+# 建立用于共享的文件夹
+sudo mkdir /media/nfs
+```
+
+更改配置文件
+> sudo nano /etc/exports<br>
+> <br>
+> 在最后一行写入以下内容:
+> /media/nfs \*(rw,sync,no_root_squash)
+
+![Linux架构目标操作系统23]()
+
+最后一步：开启nfs服务：
+```
+sudo /etc/init.d/rpcbing restart
+
+# 执行该步时，出现报错，报错信息如下图
+sudo /etc/init.d/nfs-kernel-server restart
+```
+![Linux架构目标操作系统25]()
+
+> 报错原因时没有开启nfs服务，重新配置内核编译开启即可。
+
+client端（VMware中的Ubuntu）：
+```
+# 下载nfs客户端
+sudo apt-get install -y nfs-common
+
+# 建立用于nfs共享的文件夹
+sudo mkdir /mnt/nfs
+```
+我的树莓派和电脑连接的同一个路由器（网段），首先ping通树莓派
+
+![Linux架构目标操作系统24]()
+
+将文件夹挂载到
 
 # 四、实验总结
 本次实验主要完成以下工作
