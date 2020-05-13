@@ -156,6 +156,7 @@ sudo umount mnt/ext4
 > Gerneral setup
 > > 1) <M> Kernel .config support -> < > Kernel .config support，该选项是将.config文件存入内核<br>
 > > 2) [\*] Profiling support -> [ ] Profiling support，该选项用于系统评测<br>
+> <br>
 > Networking suppory
 > > 取消Amateur Radio support，IrDA subsystem support，Bluetooth subsystem support，WiMAX support，NFC support等用不上的网络通信模块。
 
@@ -180,8 +181,8 @@ make编译之后，进行模块安装，然后将内核和设备树blob复制到
 ```
 
 在树莓派中输入lsmod命令，却发生了错误显示
-![Linux架构目标操作系统22](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F22.png)
 
+![Linux架构目标操作系统22](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F22.png)
 
 ## 3.构建NFS文件系统
 NFS文件系统由服务端（server）和客户端（client）构成。
@@ -231,9 +232,11 @@ sudo mkdir /mnt/nfs
 > sudo mount -t nfs -o nolock -o tcp 192.168.0.118:/media/nfs /mnt/nfs/
 
 执行完挂载，在client端创建文件
+
 ![Linux架构目标操作系统27](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F27.png)
 
 在server端可以看到创建的文件
+
 ![Linux架构目标操作系统29](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F29.png)
 
 # 四、实验总结
@@ -242,4 +245,4 @@ sudo mkdir /mnt/nfs
 2. 初步掌握对内核进行剪裁的方法。
 3. 通过本次实验对host端编译开发板内核有了系统的认识
 4. 掌握了安装文件系统的方法。
-* 5. 熟练掌握问题解决方法
+*  熟练掌握问题解决方法
