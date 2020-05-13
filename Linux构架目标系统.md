@@ -169,7 +169,7 @@ make编译之后，进行模块安装，然后将内核和设备树blob复制到
 
 远程ssh登录树莓派，可以看到内核已经变为4.19.122-v7+
 
-![Linux架构目标操作系统21]()
+![Linux架构目标操作系统21](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F21.png)
 
 在内核剪裁时设置为M的模块，不需要绑定内核，可以动态的加载到内核，常用操作指令如下：
 ```
@@ -180,7 +180,7 @@ make编译之后，进行模块安装，然后将内核和设备树blob复制到
 ```
 
 在树莓派中输入lsmod命令，却发生了错误显示
-![Linux架构目标操作系统22]()
+![Linux架构目标操作系统22](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F22.png)
 
 
 ## 3.构建NFS文件系统
@@ -205,7 +205,7 @@ sudo mkdir /media/nfs
 > 在最后一行写入以下内容:
 > /media/nfs \*(rw,sync,no_root_squash)
 
-![Linux架构目标操作系统23]()
+![Linux架构目标操作系统23](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F23.png)
 
 最后一步：开启nfs服务：
 ```
@@ -225,16 +225,16 @@ sudo mkdir /mnt/nfs
 ```
 我的树莓派和电脑连接的同一个路由器（网段），首先ping通树莓派
 
-![Linux架构目标操作系统24]()
+![Linux架构目标操作系统24](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F24.png)
 
 将文件夹挂载到服务器端（192.168.0.118）的共享文件下
 > sudo mount -t nfs -o nolock -o tcp 192.168.0.118:/media/nfs /mnt/nfs/
 
 执行完挂载，在client端创建文件
-![Linux架构目标操作系统27]()
+![Linux架构目标操作系统27](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F27.png)
 
 在server端可以看到创建的文件
-![Linux架构目标操作系统29]()
+![Linux架构目标操作系统29](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F29.png)
 
 # 四、实验总结
 本次实验主要完成以下工作
