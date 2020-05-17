@@ -29,7 +29,7 @@ Ext3 adds reliability via journaling（日志）.
 Ext4 after 2.628，在Ext3基础上增加了新特性，如延迟分配和在线碎片整理等。
 
 Ext2的物理结构如下图所示：
-![嵌入式Linux文件系统1]()
+![嵌入式Linux文件系统1](https://github.com/yiyading/day-read/blob/master/img/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F1.png)
 
 * Boot Block：文件系统引导块
 * Super Block：每个块组都有内容相同的超级块，是文件系统控制块
@@ -111,11 +111,11 @@ DiskOnChip（DOC）：可通过Kernel配置、编译过程启动。
 
 file_operations结构提供各种文件的操作与管理接口：
 
-![嵌入式Linux文件系统2]()
+![嵌入式Linux文件系统2](https://github.com/yiyading/day-read/blob/master/img/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F2.png)
 
 下图展示了一个在Ext2和MS-DOS文件系统间的copy operation
 
-![嵌入式Linux文件系统3]()
+![嵌入式Linux文件系统3](https://github.com/yiyading/day-read/blob/master/img/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F3.png)
 
 Linux VFS objects types
 > 1. The superblock object：存放相关被挂载的文件系统的信息
@@ -129,7 +129,7 @@ VFS通过文件结构中指针f_op指向**file****_****operations**结构，来�
 
 VFS系统调用：常用如open(), read(), write(), close()
 
-![嵌入式Linux文件系统4]()
+![嵌入式Linux文件系统4](https://github.com/yiyading/day-read/blob/master/img/%E5%B5%8C%E5%85%A5%E5%BC%8FLinux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F4.png)
 
 VFS支持的文件系统：
 1. 磁盘文件系统（Disk-base file systems）：Cramfs, Ext2, Ext3, Ext4, ReiserFS, JFFS2, YAFFS2, Romfs
