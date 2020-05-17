@@ -182,3 +182,6 @@ Busybox通过一个小于1 MB(与glibc静态链接)或小于500 KB(与uClibc静�
 简介NFS：NFS是一种分布式文件系统。提供NFS服务的一方是NFS Server，使用NFS服务的一方是NFS Client。Client可以将Server提供的共享目录挂载到本地目录上，在本地操作如同对Server操作。
 
 在开发板和主机之间使用NFS，可以更加便捷的完成对程序的开发，减少image的下载次数和对flash的烧写次数。缩短开发周期。
+
+下属连接中，有NFS的安装过程，并且该连接中包含嵌入式Liunx重编译和剪裁过程
+[NFS安装过程点我](https://github.com/yiyading/day-read/blob/master/Linux%E6%9E%84%E6%9E%B6%E7%9B%AE%E6%A0%87%E7%B3%BB%E7%BB%9F.md)
