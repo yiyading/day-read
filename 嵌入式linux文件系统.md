@@ -123,7 +123,7 @@ Linux VFS objects types
 > 3. The file object：存放打开的文件和进程之间的信息
 > 4. The dentry object：存放相关文件直接入口的链接信息
 
-VFS通过文件结构中指针f_op指向**file****_****operations**结构，来为用户提供统一的操作界面。
+VFS通过文件结构中指针f_op指向**file_operations**结构，来为用户提供统一的操作界面。
 
 进程在引用file_operations结构中的指针时，将跳到对应的文件系统的操作函数上，如果没有该文件系统，则指针指向NULL。
 
