@@ -45,15 +45,16 @@ void *kmalloc(size_t size, int flags);
 1. size：要分配的块的大小
 2. flags：分配标志位，表示分配内存的方法
 
+```
 flags的参考用法：<br>
-> |-进程上下文，可以睡眠		GFP_KERNEL<br>
-> |-进程上下文，不可以睡眠	GFP_ATOMIC<br>
-> |   |-中断处理程序		GFP_ATOMIC<br>
-> |   |-软中断			GFP_ATOMIC<br>
-> |   |-Tasklet			GFP_ATOMIC<br>
-> |-用于DMA内存，可以睡眠		GFP_DMA | GFP_KERNEL<br>
-> |-用于DMA内存，不可以睡眠	GPF_DMA | GFP_ATOMIC<br>
-
+|-进程上下文，可以睡眠		GFP_KERNEL
+|-进程上下文，不可以睡眠	GFP_ATOMIC
+|   |-中断处理程序		GFP_ATOMIC
+|   |-软中断			GFP_ATOMIC
+|   |-Tasklet			GFP_ATOMIC
+|-用于DMA内存，可以睡眠		GFP_DMA | GFP_KERNEL
+|-用于DMA内存，不可以睡眠	GPF_DMA | GFP_ATOMIC
+```
 **kmalloc()的对应的内存释放函数是kfree**。
 
 
