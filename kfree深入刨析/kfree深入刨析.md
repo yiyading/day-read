@@ -8,7 +8,7 @@
 
 进程的4GB内存空间被人为的分为两个部分--用户空间与内核空间。用户空间地址分布从0到3GB(PAGE_OFFSET，在0x86中它等于0xC0000000)，3GB到4GB为内核空间。
 
-[点我->linux内核空间与用户空间详细介绍](../Linux内核空间与用户空间.md)
+[点我->linux内核空间与用户空间详细介绍](https://github.com/yiyading/day-read/blob/master/Linux%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4%E4%B8%8E%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4.md)
 
 kmalloc和get_free_page申请的内存位于物理内存映射区域，而且在物理上也是连续的，它们与真实的物理地址只有一个固定的偏移，因此存在较简单的转换关系，virt_to_phys()可以实现内核虚拟地址转化为物理地址：
 ```c
