@@ -36,24 +36,24 @@
 
 当程序执行时，RW_data和ZI_data在RAM中，RO_data和code视cpu架构（51、arm、x86）不同处于ROM或者RAM中。其中ZI_data对应BSS段，RW_data对应数据段，code对应代码段，RO_data对应数据段。
 
-![观察Linux内存映射1](img/观察Linux内存映射1)
+![观察Linux内存映射1](img/观察Linux内存映射1.png)
 
 # 二、实验流程
 
 ## 1. 编译连接singlefoo.c为shared library
-![观察Linux内存映射2](img/观察Linux内存映射1)
+![观察Linux内存映射2](img/观察Linux内存映射2.png)
 
 ## 2. 拷贝动态库到默认动态库路径
-![观察Linux内存映射3](img/观察Linux内存映射1)
+![观察Linux内存映射3](img/观察Linux内存映射3.png)
 
 ## 3. 编译lkpmem.c
-![观察Linux内存映射4](img/观察Linux内存映射1)
+![观察Linux内存映射4](img/观察Linux内存映射4.png)
 
 ## 4. 运行测试程序
-![观察Linux内存映射5](img/观察Linux内存映射1)
+![观察Linux内存映射5](img/观察Linux内存映射5.png)
 
 ## 5.查看该测试程序的内存映射
-![观察Liunx内存映射6](img/观察Linux内存映射1)
+![观察Liunx内存映射6](img/观察Linux内存映射6.png)
 
 **ps command**
 ```shell
