@@ -112,7 +112,7 @@ sudo qemu-system-x86_64 -S -kernel bzImage -initrd initrd.img-5.3.0 -m 1024
 ```
 
 同时摁ctrl+alt+2进入qemu命令行界面，输入**gdbserver tcp::4321**，建立并等待gdb连接
-![qemu+kgdb3](https://github.com/yiyading/day-read/blob/master/img/qemu%2Bkgdb.png)
+![qemu+kgdb3](https://github.com/yiyading/day-read/blob/master/img/qemu%2Bkgdb3.png)
 
 在kDebug目录下打开另一个终端
 ```
