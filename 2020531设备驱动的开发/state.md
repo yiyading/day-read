@@ -53,13 +53,27 @@ struct inode				// inode是Kernel用来管理文件的超大型数据结构
 > register_chrdec()/register_blkdev()<br>
 > unregister_chrdev()/unregister_blkdev()<br>
 
-linux编写程序的关键步骤：
+linux编写程序的关键步骤：（以scull为例）
 1. 定义设备驱动程序接口(struct file_operations)
+> 如scull_open(), scull_release(), scull_read(), scull_write(), scull_ioctl()等
+
 2. 定义设备驱动程序初始化和注销函数
+> 如scull_init_module(), scull_cleanup_module()
+
 3. 编译驱动程序
+> 放在内核源码树外，创建Makefile，编译驱动模块<br>
+> 加入到内核源码树，更新Kbuild，创建Makefile，menuconfig，编译内核和驱动模块<br>
+
 4. 创建设备文件
+> mknod Device_name {b|c} major minor<br>
+> mknod myscull c 240 0<br>
+
 5. 加载/卸载驱动
+> insmod myscull.ko
+> rmmod myscull
+
 6. 测试驱动程序
+> 如test.c
 
 Linux内核调试技术:
 
@@ -70,3 +84,24 @@ printk/strace/kernel oops messages/magic SysRq key/KDB/KGDB/gdb for kernel debug
 
 ## 1.模块放在内核源码树外进行插入
 首先编写一个Makefile文件[Makefile](Makefile)
+
+Makefile文件需要和modemo.c文件在同一目录下
+
+执行以下命令
+![设备驱动3](img/设备驱动3)
+
+从上图中可以看出，使用lsmod命令后，modemo模块已经插入了内核
+
+## 2.将模块加载到内核源码树
+嵌入式软件开发技术与工具（11）
+
+# 三、scull
+scull的作用是把一块内存区域当成字符设备使用，即scull驱动的目标设备是一块内存区域。
+
+scull不依赖于任何硬件，只是为了展示kernel与char driver之间的接口，不具有使用功能。
+
+但考虑到许多设备是memory-mapped，就设备驱动的开发过程来说，scull设备和真实设备具有很好的相似性！
+
+sbull(Simple Block Utility for Loading Localities)完成基于内存的ramdisk功能，有一定的用处。加载sbull后，可以在内存虚拟的disk上进行分区、创建、删除、读写文件等
+
+
