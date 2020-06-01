@@ -96,6 +96,13 @@ Makefile文件需要和modemo.c文件在同一目录下
 查看 **/var/log/kern.log**可以查看到模块的打印信息
 
 ![设备驱动4](img/设备驱动4)
+
+```shell
+insmod *.ko		# 插入模块
+rmmod  *.ko 	# 删除模块
+lsmod  			# 查看模块
+tail -n 5 /var/log/kern.log		# 查看日志文件，可查看模块化中的打印消息
+```
 ## 2.将模块加载到内核源码树
 嵌入式软件开发技术与工具（11）
 
