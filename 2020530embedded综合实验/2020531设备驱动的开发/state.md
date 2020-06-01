@@ -98,9 +98,9 @@ Makefile文件需要和modemo.c文件在同一目录下
 ![设备驱动4](img/设备驱动4.png)
 
 ```shell
-insmod *.ko		# 插入模块
-rmmod  *.ko 	# 删除模块
-lsmod  			# 查看模块
+insmod *.ko						# 插入模块
+rmmod  *.ko						# 删除模块
+lsmod							# 查看模块
 tail -n 5 /var/log/kern.log		# 查看日志文件，可查看模块化中的打印消息
 ```
 ## 2.将模块加载到内核源码树
@@ -114,5 +114,19 @@ scull不依赖于任何硬件，只是为了展示kernel与char driver之间的�
 但考虑到许多设备是memory-mapped，就设备驱动的开发过程来说，scull设备和真实设备具有很好的相似性！
 
 sbull(Simple Block Utility for Loading Localities)完成基于内存的ramdisk功能，有一定的用处。加载sbull后，可以在内存虚拟的disk上进行分区、创建、删除、读写文件等
+
+
+/* 
+ * 从2.4.10版本内核开始，模块必须通过MODULE_LICENSE宏声明此模块的许可证，
+ * 否则在加载此模块时，会收到内核被污染 “kernel tainted” 的警告。
+ * 从linux/module.h文件中可以看到，被内核接受的有意义的许可证有
+ * “GPL”，“GPL v2”，“GPL and additional rights”，“Dual BSD/GPL”，“Dual MPL/GPL”，“Proprietary”。
+ */
+
+MODULE_LICENSE("GPL")	// 模块的许可证明
+
+Major Numbers主设备号：代表某一类设备，标定一个确定的驱动程序。
+
+Minor Numbers次设备号：不同的位置，不同的操作等。标定一个具体的设备。
 
 
