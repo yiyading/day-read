@@ -1,0 +1,1 @@
+cmd_/study/my/day-read/2020530embedded综合实验/2020531设备驱动的开发/modemo.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /study/my/day-read/2020530embedded综合实验/2020531设备驱动的开发/modemo.ko /study/my/day-read/2020530embedded综合实验/2020531设备驱动的开发/modemo.o /study/my/day-read/2020530embedded综合实验/2020531设备驱动的开发/modemo.mod.o ;  true
