@@ -29,8 +29,9 @@ Linux为不同的（字符型、块）设备所对应的驱动程序提供统一
 
 驱动程序使用的结构体
 ```c
+// struct file定义在include/linux/fs.h
 struct file
-
+// 
 struct file_operations
 
 struct inode				// inode是Kernel用来管理文件的超大型数据结构
@@ -115,7 +116,7 @@ scull不依赖于任何硬件，只是为了展示kernel与char driver之间的�
 
 sbull(Simple Block Utility for Loading Localities)完成基于内存的ramdisk功能，有一定的用处。加载sbull后，可以在内存虚拟的disk上进行分区、创建、删除、读写文件等
 
-
+```c
 /* 
  * 从2.4.10版本内核开始，模块必须通过MODULE_LICENSE宏声明此模块的许可证，
  * 否则在加载此模块时，会收到内核被污染 “kernel tainted” 的警告。
@@ -125,8 +126,11 @@ sbull(Simple Block Utility for Loading Localities)完成基于内存的ramdisk�
 
 MODULE_LICENSE("GPL")	// 模块的许可证明
 
-Major Numbers主设备号：代表某一类设备，标定一个确定的驱动程序。
+// Major Numbers主设备号：代表某一类设备，标定一个确定的驱动程序。
+// Minor Numbers次设备号：不同的位置，不同的操作等。标定一个具体的设备。
 
-Minor Numbers次设备号：不同的位置，不同的操作等。标定一个具体的设备。
 
+
+
+```
 
