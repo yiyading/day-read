@@ -14,13 +14,12 @@ struct cdev cdev; /* Char device structure */
 size_t size = 0;
 char store[MAX_SIZE];
 
-/*
-* Open and close
-*/
+
+// Open and close
 int scull_open(struct inode *inode , struct file *filp)
 {
-  /* trim to 0 the length of the device if open was write -only
-  */
+  // trim to 0 the length of the device if open was write -only
+  
   if ( (filp -> f_flags & O_ACCMODE) == O_WRONLY) {
     size = 0;
   }
@@ -32,9 +31,8 @@ int scull_release(struct inode *inode , struct file *filp)
   return 0;
 }
 
-/*
-* Data management: read and write
-*/
+
+// Data management: read and write
 ssize_t scull_read(struct file *filp , char __user *buf, size_t count, loff_t *f_pos)
 {
   ssize_t retval = 0;
@@ -51,6 +49,7 @@ ssize_t scull_read(struct file *filp , char __user *buf, size_t count, loff_t *f
 out:
   return retval;
 }
+
 ssize_t scull_write(struct file *filp , const char __user *buf,size_t count ,loff_t *f_pos)
 {
   ssize_t retval = -ENOMEM; /* value used in "goto out"
@@ -71,6 +70,7 @@ statements */
 out:
   return retval;
 }
+
 struct file_operations scull_fops = {
   .owner = THIS_MODULE ,
   .read = scull_read ,

@@ -56,7 +56,7 @@ struct inode				// inode是Kernel用来管理文件的超大型数据结构
 设备文件放在/dev目录下，如/dev/console。
 
 设备文件可以挂载到任何指定目录下，但设备驱动在使用前要先注册，使用完注销。
-> register_chrdec()/register_blkdev()<br>
+> register_chrdev()/register_blkdev()<br>
 > unregister_chrdev()/unregister_blkdev()<br>
 
 linux编写程序的关键步骤：（以scull为例）
@@ -201,7 +201,9 @@ MODULE_LICENSE("GPL")	// 模块的许可证明
 // Major Numbers主设备号：代表某一类设备，标定一个确定的驱动程序。
 // Minor Numbers次设备号：不同的位置，不同的操作等。标定一个具体的设备。
 
-
+// 内核用inode表示文件，其中两个字段与编写驱动有关
+// dev_t i_rdev，当inode指向一个字符设备文件时，存放设备编号
+// struct cdev *i_cdev，字符设备的内部结构，指向struct cdev
 
 
 ```
