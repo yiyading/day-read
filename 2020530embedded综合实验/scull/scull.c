@@ -13,6 +13,7 @@ struct cdev cdev; /* Char device structure */
 #define MAX_SIZE 10
 size_t size = 0;
 char store[MAX_SIZE];
+
 /*
 * Open and close
 */
@@ -25,10 +26,12 @@ int scull_open(struct inode *inode , struct file *filp)
   }
   return 0; /* success */
 }
+
 int scull_release(struct inode *inode , struct file *filp)
 {
   return 0;
 }
+
 /*
 * Data management: read and write
 */
@@ -39,12 +42,12 @@ ssize_t scull_read(struct file *filp , char __user *buf, size_t count, loff_t *f
     goto out;
   if (*f_pos + count > size)
     count = size - *f_pos;
-  if (copy_to_user(buf, store + *f_pos , count)) {
-    retval = -EFAULT;
+  if (raw_copy_to_user(buf, store + *f_pos , count)) {
+    retval = -EFAULT;	// 返回一个错误代码
     goto out;
   }
   *f_pos += count;
-  retval = count;
+ retval = count;
 out:
   return retval;
 }
@@ -56,7 +59,7 @@ statements */
     goto out;
   if (*f_pos + count > MAX_SIZE)
     count = MAX_SIZE - *f_pos;
-  if (copy_from_user(store + *f_pos , buf, count)) {
+  if (raw_copy_from_user(store + *f_pos , buf, count)) {
     retval = -EFAULT;
     goto out;
   }
@@ -111,5 +114,6 @@ void scull_cleanup_module(void)
   dev = MKDEV(scull_major , scull_minor);
   unregister_chrdev_region(dev, 1);
 }
+
 module_init(scull_init_module);
 module_exit(scull_cleanup_module);

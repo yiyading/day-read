@@ -1,3 +1,8 @@
+参考内容
+```web
+https://www.jianshu.com/p/487a12a06dbe
+```
+
 # 一、什么是设备驱动？
 
 驱动程序是操作系统内核和硬件设备之间的接口。系统通过各种驱动程序操纵硬件设备，操作系统提供统一的操作方式与各种设备驱动对接，这是OS最基本的功能之一。
@@ -115,6 +120,73 @@ scull不依赖于任何硬件，只是为了展示kernel与char driver之间的�
 但考虑到许多设备是memory-mapped，就设备驱动的开发过程来说，scull设备和真实设备具有很好的相似性！
 
 sbull(Simple Block Utility for Loading Localities)完成基于内存的ramdisk功能，有一定的用处。加载sbull后，可以在内存虚拟的disk上进行分区、创建、删除、读写文件等
+
+## 1. 简单的字符设备scull
+首先在用户目录下创建文件夹scull，其中包含三个文件：scull.c、Makefile、build
+
+后文有[scull.c源码](https://github.com/yiyading/day-read/blob/master/2020530embedded%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/scull/scull.c)中的部分功能解释
+
+cdev结构说明
+```c
+struct cdev {
+    struct kobject kobj;
+    struct module *owner;	//所属模块  
+    const struct file_operations *ops;	//文件操作结构
+    struct list_head list;
+    dev_t dev; 		//设备号，int 类型，高12位为主设备号，低20位为次设备号
+    unsigned int count;
+};
+
+cdev_add(&cdev, dev, 1)	//在字符设备中添加一个设备
+```
+
+**read() and write()函数**：
+```c
+scull_read/scull_write(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+
+// flip文件类型，一般在open函数中都会是filp指向模块的文件结构，但是本文采用全局变量实现，没有用到filp
+// buf是要读到的地方
+// count是要读取的个数
+// f_ops是偏移量
+// 指针和链表是C语言的两大特点
+
+copy_from_user和copy_to_user的函数原型都是strncpy，作用是在内核空间和用户空间之间进行字符复制
+```
+
+build和Makefile内的内容
+```
+# build
+make -C /lib/modules/$(uname -r)/build M=$(pwd) modules
+
+# Makefile
+obj-m := scull.o
+```
+
+进入scull目录输入以下命令
+```bash
+sh build
+
+insmod scull.ko	// 装载scull.ko模块
+
+cat /proc/device | grep scull // 查看注册设备
+
+// 如果有类似以下信息（数字可能不一样），则说明一切顺利。
+// 否则模块初始化有错误，可查看/var/log/kern.log了解情况
+242 scull
+
+// 建立设备文件
+mknod /dev/scull c 242 0	// 按照查看的设备号更改242
+
+// 测试
+echo yyd > /dev/scull
+cat /dev/scull
+
+// 如果输出yyd则证明设备正常工作
+
+// 设备移除
+rm /dev/scull
+rmmod scull
+```
 
 ```c
 /* 
