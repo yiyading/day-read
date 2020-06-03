@@ -1,6 +1,7 @@
 参考内容
-```web
+```
 https://www.jianshu.com/p/487a12a06dbe
+https://www.cnblogs.com/fanweisheng/p/11138653.html
 ```
 
 # 一、什么是设备驱动？
@@ -144,7 +145,7 @@ cdev_add(&cdev, dev, 1)	//在字符设备中添加一个设备
 ```c
 scull_read/scull_write(struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
 
-// flip文件类型，一般在open函数中都会是filp指向模块的文件结构，但是本文采用全局变量实现，没有用到filp
+// flip:文件类型，一般在open函数中都会是filp指向模块的文件结构，但是本文采用全局变量实现，没有用到filp
 // buf是要读到的地方
 // count是要读取的个数
 // f_ops是偏移量
@@ -188,23 +189,8 @@ rm /dev/scull
 rmmod scull
 ```
 
-```c
-/* 
- * 从2.4.10版本内核开始，模块必须通过MODULE_LICENSE宏声明此模块的许可证，
- * 否则在加载此模块时，会收到内核被污染 “kernel tainted” 的警告。
- * 从linux/module.h文件中可以看到，被内核接受的有意义的许可证有
- * “GPL”，“GPL v2”，“GPL and additional rights”，“Dual BSD/GPL”，“Dual MPL/GPL”，“Proprietary”。
- */
+## 2.scull的实现
 
-MODULE_LICENSE("GPL")	// 模块的许可证明
+[scull_open](open方法.md)
 
-// Major Numbers主设备号：代表某一类设备，标定一个确定的驱动程序。
-// Minor Numbers次设备号：不同的位置，不同的操作等。标定一个具体的设备。
-
-// 内核用inode表示文件，其中两个字段与编写驱动有关
-// dev_t i_rdev，当inode指向一个字符设备文件时，存放设备编号
-// struct cdev *i_cdev，字符设备的内部结构，指向struct cdev
-
-
-```
-
+[scull_release](release方法.md)

@@ -21,7 +21,7 @@ int scull_open(struct inode *inode , struct file *filp)
   // trim to 0 the length of the device if open was write -only
   
   if ( (filp -> f_flags & O_ACCMODE) == O_WRONLY) {
-    size = 0;
+	size = 0;
   }
   return 0; /* success */
 }
