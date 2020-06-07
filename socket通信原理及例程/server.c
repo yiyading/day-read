@@ -20,7 +20,7 @@ int main(){
 	///定义sockaddr_in
 	struct sockaddr_in server_sockaddr;
 	server_sockaddr.sin_family = AF_INET;			// 协议族
-	server_sockaddr.sin_port = htons(MYPORT)		// sin_point=0，自动选择一个未占用的端口
+	server_sockaddr.sin_port = htons(1234);		// sin_point=0，自动选择一个未占用的端口
 	server_sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);	// sim_addr.s_addr置为INADDR_ANY，自动填入本机IP地址
  
 	//bind，成功返回0，出错返回-1
