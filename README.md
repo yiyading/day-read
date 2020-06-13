@@ -2,6 +2,8 @@
 
 我心待明日，万事成蹉跎。
 
+2020.*系列为日记。
+
 1. [嵌入式Linux文件系统](https://github.com/yiyading/day-read/blob/master/%E5%B5%8C%E5%85%A5%E5%BC%8Flinux%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F.md)主要介绍了文件系统的概念与部分应用
 > 1. 介绍Linux文件系统的四个特性，并简单介绍了Ext系列文件系统和其他可用于嵌入式的文件系统
 > 2. 简单介绍了文件系统的载体（存储设备），MTD, Non-MTD Flash-Based devices,other
@@ -22,3 +24,5 @@
 > 4. 通过实例介绍了如何观察内存映射
 > > 需要注意的是如果想要观察maps，需要lkpmem保持运行状态
 > 5. 介绍了maps不同字段的含义
+
+
