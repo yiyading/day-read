@@ -106,6 +106,7 @@ struct sockaddr_in{
 ```c
 int bind(int sockfd, struct sockaddr *my_addr, int addrlen);
 
+/*
 功能：将本地IP地址绑定端口号，并将地址与sockfd关联起来;
 参数：
 	sockfd：调用socket()函数返回的socket描述符
@@ -115,6 +116,17 @@ int bind(int sockfd, struct sockaddr *my_addr, int addrlen);
 返回：
 	成功：0
 	失败：-1，并将errno置为相应的错误码
+*/
+
+// bind()地址、端口选择，使用的时候先声明这样一个结构体进行定义，然后在bind中调用
+struct sockaddr_in my_addr;
+/*
+将my_addr.sin_port 置为0，自动选择一个未占用的端口。
+将my_addr.sin_addr.s_addr 置为INADDR_ANY，自动填入本机IP 地址
+使用bind 函数时需要将sin_port 转换成为高位字节优先顺序；而sin_addr 则不需要转换。(inet_addr()返回的已经是高位字节优先顺序)。
+客户端程序设计无需调用bind()，在已知目的机器的IP 地址情况下，socket执行体会为客户端程序自动选择地址和未被占用的端口。
+服务器端调用bind()将socket与地址/端口绑定是必须的。
+*/
 ```
 注：在调用bind 函数时一般不要将端口号置为小于1024 的值，因为1到1024是保留端口号，应用程序可以选择大于1024中的任何一个没有被占用的端口号！
 
@@ -129,6 +141,8 @@ htons()：把16位值从主机字节序转换成网络字节序
 ntohl()： 把32位值从网络字节序转换成主机字节序
 ntohs()：把16位值从网络字节序转换成主机字节序
 ```
+
+
 
 * 使用bind 函数时需要将sin_port 转换成为高位字节优先顺序；而sin_addr 则不需要转换。(inet_addr()返回的已经是高位字节优先顺序)
 * 客户端程序设计无需调用bind()，在已知目的机器的IP地址情况下，socket执行体会为客户端程序自动选择地址和未被占用的端口
