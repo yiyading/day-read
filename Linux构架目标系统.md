@@ -91,14 +91,14 @@ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- zImage modules dtbs
 上述步骤执行第一部后，终端显示<br>
 ![Linux架构目标操作系统5](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F5.png)
 
-可在linux/arch/arm/boot/目录下查看刚刚编译生成的文件
+可在linux/arch/arm/boot/目录下查看刚刚编译生成的文件<br>
 ![Linux架构目标操作系统6](https://github.com/yiyading/day-read/blob/master/img/Linux%E6%9E%B6%E6%9E%84%E7%9B%AE%E6%A0%87%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F6.png)
 
 3. 内核写入SD卡
 
 上面第2步实现了对树莓派内核在host端的交叉编译，使用这种方法的优点在于编译速度较快，因为host端的配置一般都高于树莓派。
 
-我使用的host可thinkpadx1c，可直接插入sd卡。
+我使用的host是thinkpadx1c，可直接插入sd卡。
 
 SD卡需要进行格式化。
 
