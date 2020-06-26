@@ -161,12 +161,21 @@ int listen(int sockfd, int backlog);
 	sockfd：调用socket函数返回的socket描述符
 	backlog：指定在请求队列中允许的最大请求数，缺省值一般为10, 20，连接请求将在队列中等待accept()
 
-如果一个服务请求到来时，输入队列已满，该连接请求将被拒绝，客户端会收到一个出错消息
+服务请求：如果一个服务请求到来时，输入队列已满，该连接请求将被拒绝，客户端会收到一个出错消息
 
 返回：
 	成功；0
 	失败：-1，并将errno置为相应的错误号
 */
+
+// bind/listen example
+address_s.sin_family = AF_INET;
+address_s.sin_addr.s_addr = inet_addr("127.0.0.1");
+address_s.sin_pore = htons(9999);
+
+bind(sockfd_s, (struct sockaddr *)&address_s, sizeof(sizeof(address_s)));
+
+listen(sockfd_s, 9);
 ```
 4. **accept()**
 
@@ -184,13 +193,35 @@ int accept(int sockfd, void *addr, int *addrlen);
 	成功：一个新的套接字描述符用于该专用连接
 	失败：返回-1，并将errno置为相应的错误号
 */
+
+// accept example
+#define BUFFER_SIZE 1024
+socklen_t address_len = sizeof(address_c);
+char buffer[BUFFER_SIZE];
+
+int sockfd_c = accept(sockfd_s, (struct sockaddr *)&address_c, &address_len);
+while(1){
+	pid = fork();
+	if(pid == -1){
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}else if(pid == 0){
+		memset(buffer, 0, sizeof(buffer));
+		int len = recv(sockfd_c, buff, sizeof(buffer), 0);
+		if(strcmp(buffer, "exit\n") == 0)
+			break;
+		fputs(buffer, stdout);
+		send(sockfd_c, buffer, len, 0);	// 将接收到的字符再返回client
+	}
+}
 ```
 当accept()函数监视的socket收到连接请求时，socket执行体将建立一个新的socket，accept函数返回的是这个新的socket的描述符，recv，send或read，write函数将基于这个新的socket描述符传递数据。
 
 通常在accept()函数之后，会通过fork()等系统函数创建新的进程，用于和某个客户端交换数据。
 
 收到服务请求的初始socket将继续监听是否有新的服务请求到来。
-
+> 初始socket用来绑定地址端口信息。<br>
+> accept建立的socket用来完成文件的传输。<br>
 
 5. **connect()**
 
