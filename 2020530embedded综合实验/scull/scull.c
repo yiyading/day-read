@@ -86,7 +86,9 @@ int scull_init_module(void)
   * Get a range of minor numbers to work with , asking for a
   dynamic major
   */
-  result = alloc_chrdev_region(&dev, scull_minor , 1, "scull");//动态申请设备号，设备名称"scull",设备个数1，次设备号scull_minor,申请到的设备号存储在dev中。该函数返回值小于0表示申请失败。
+  	//alloc自动分配设备号，设备名称"scull",设备个数1，次设备号scull_minor,申请到的设备号存储在dev中。该函数返回值小于0表示申请失败。
+	// dev 
+  result = alloc_chrdev_region(&dev, scull_minor , 1, "scull");
   scull_major = MAJOR(dev);
   if (result < 0) {
     printk(KERN_WARNING "scull:?can't?get?major?%d\n",
