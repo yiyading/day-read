@@ -1,6 +1,14 @@
 riscv64-unknown-linux-gnu-gcc该工具针对于riscv64架构的编译器，使用的C运行库为linux中的**标准glibc**。
 
-## 1. RISC-V数据模型，-mabi=ilp32, ilp32f, ilp32d, lp64, lp64f, lp64d
+# 本部分讨论RISC-V ISA中最基本的3个参数：-march、-mabi、-mtune
+更详细的内容请参考：https://genekong.com/2018/09/20/part-1-risc-v-%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E4%B8%89%E9%A9%BE%E9%A9%AC%E8%BD%A6%EF%BC%88-march%E3%80%81-mabi%E3%80%81-%E5%92%8C-mtune%EF%BC%89/
+
+## 1. 参数简介
+· -march=ISA 用于选择目标的架构，这个参数告诉编译器可以使用哪些指令或者哪种寄存器；
+· -mabi =AIB 选择目标应用程序接口(ABI)，这个可以控制程序调用约定规则（例如使用哪种寄存器传递哪种参数，使用哪种寄存器返回数据）和数据在内存中的布局；
+· -mtune=CODENAME 用于选择目标微架构，此参数可以告知GCC每条指令的性能，可以让工具进行一些针对目标的代码优化。
+
+RISC-V数据模型，-mabi=ilp32, ilp32f, ilp32d, lp64, lp64f, lp64d
 
 **选项：-mabi**
 
