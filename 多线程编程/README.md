@@ -24,7 +24,7 @@
 # 内核线程
 * 由内核创建和撤销<br>
 
-* 只运行在**内核态(Kernel Modei)**<br>
+* 只运行在**内核态(Kernel Model)**<br>
 
 * 只使用大于PAGE_OFFSET的线性地址空间<br>
 
@@ -90,7 +90,7 @@ void pthread_exit(void* retval);
 返回值存储在void \*retval中。<br>
 
 ## 4.创建线程的源代码
-[pthread.c](https://github.com/yiyading/Embedded-software/blob/master/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/pthread.c)
+[pthread.c](pthread1.c)
 
 # 二、POSIX信号量
 信号量和互斥锁（mutex）的区别：互斥锁只允许一个线程进入临界区，而信号量允许多个线程同时进入临界区。<br>

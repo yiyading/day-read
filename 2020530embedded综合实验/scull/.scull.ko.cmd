@@ -1,1 +1,0 @@
-cmd_/study/my/day-read/2020530embedded综合实验/scull/scull.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /study/my/day-read/2020530embedded综合实验/scull/scull.ko /study/my/day-read/2020530embedded综合实验/scull/scull.o /study/my/day-read/2020530embedded综合实验/scull/scull.mod.o ;  true
