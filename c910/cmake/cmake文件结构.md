@@ -1,4 +1,4 @@
-#一、CMakeLists.txt文件
+# 一、CMakeLists.txt文件
 
 **cmake的文件名字必须为CMakeLists.txt**
 
@@ -31,5 +31,34 @@ add_library(demo SHARED util.c)	# 生成动态库或者共享库
 ```
 6. 指定编译包含的源文件
 ```cmake
+# 明确指定包含哪些源文件
+add_library(demo demo.c demo1.c demo2.c)
 
+# 搜索所有的 .c 文件
+aux_source_directory(. SRC_LIST)	# 将当前目录下所有 .c 文件
+add_library(demo ${SRC_LIST})		# 编译，宏定义替换
+
+# 还可以自定义搜索规则
 ```
+
+7. 查找指定库文件
+```cmake
+find_library(VAR name path)	# 查找指定的预编译库，并将它的路径存储在答复变量中
+# 类似的还有find_file()、find_path()、find_program()、find_package()。
+```
+
+8. 设置变量
+```cmake
+# set直接设置变量的值
+set(SRC_LIST main.c main2.c)
+add_executable(demo ${SRC_LIST}
+
+# set追加设置变量值
+# list追加或者删除变量值
+set(SRC_LIST main.c)
+set(SRC_LIST ${SRC_LIST} add.c)
+list(APPEND SRC_LIST add1.c)
+list(REMOVE_ITEM SRC_LIST main.c)
+```
+# 二、常用变量
+
