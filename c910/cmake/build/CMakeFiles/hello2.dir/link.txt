@@ -1,0 +1,1 @@
+/usr/bin/cc   -rdynamic CMakeFiles/hello2.dir/main.c.o  -o hello2 

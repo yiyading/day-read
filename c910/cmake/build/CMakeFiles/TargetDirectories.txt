@@ -1,0 +1,3 @@
+/study/day-read/c910/cmake/build/CMakeFiles/rebuild_cache.dir
+/study/day-read/c910/cmake/build/CMakeFiles/hello2.dir
+/study/day-read/c910/cmake/build/CMakeFiles/edit_cache.dir
