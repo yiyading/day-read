@@ -61,4 +61,5 @@ list(APPEND SRC_LIST add1.c)
 list(REMOVE_ITEM SRC_LIST main.c)
 ```
 # 二、常用变量
-
+1. 预定义变量
+CMakeLists中很多的大写长字符都是预定义变量，具体问题具体分析
