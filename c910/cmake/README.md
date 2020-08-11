@@ -35,7 +35,7 @@ add_library(demo SHARED util.c)	# 生成动态库或者共享库
 add_library(demo demo.c demo1.c demo2.c)
 
 # 搜索所有的 .c 文件
-aux_source_directory(. SRC_LIST)	# 将当前目录下所有 .c 文件
+aux_source_directory(. SRC_LIST)	# 将当前目录下所有 .c 文件放在SRC_LIST变量中
 add_library(demo ${SRC_LIST})		# 编译，宏定义替换
 
 # 还可以自定义搜索规则
@@ -44,6 +44,12 @@ add_library(demo ${SRC_LIST})		# 编译，宏定义替换
 7. 查找指定库文件
 ```cmake
 find_library(VAR name path)	# 查找指定的预编译库，并将它的路径存储在答复变量中
+
+# 添加依赖库
+# 
+find_package(<package> [][]...)	
+
+
 # 类似的还有find_file()、find_path()、find_program()、find_package()。
 ```
 
@@ -51,7 +57,7 @@ find_library(VAR name path)	# 查找指定的预编译库，并将它的路径�
 ```cmake
 # set直接设置变量的值
 set(SRC_LIST main.c main2.c)
-add_executable(demo ${SRC_LIST}
+add_executable(demo ${SRC_LIST})
 
 # set追加设置变量值
 # list追加或者删除变量值
@@ -60,6 +66,16 @@ set(SRC_LIST ${SRC_LIST} add.c)
 list(APPEND SRC_LIST add1.c)
 list(REMOVE_ITEM SRC_LIST main.c)
 ```
+
+9. include类
+```cmake
+include_directories()	# 目的：编译时加到包含目录
+			# 增加指定目录给指定编译器去搜索包含文件
+```
 # 二、常用变量
 1. 预定义变量
-CMakeLists中很多的大写长字符都是预定义变量，具体问题具体分析
+```cmake
+CMAKE_CURRENT_SOURCE_DIR	# 当前Cmake正在处理的源目录的完整路径
+CMAKE_CURRENT_BINARY_DIR	# 当前Cmake正在处理的二进制目录的完整路径
+
+```
