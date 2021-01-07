@@ -1,1 +1,0 @@
-cmd_/study/my/day-read/2020530embedded综合实验/hello/hello.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /study/my/day-read/2020530embedded综合实验/hello/hello.ko /study/my/day-read/2020530embedded综合实验/hello/hello.o /study/my/day-read/2020530embedded综合实验/hello/hello.mod.o ;  true
